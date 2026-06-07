@@ -1,4 +1,4 @@
-package src.main.java.br.furb.banco.estruturas.listas;
+package java.br.furb.banco.estruturas.listas;
 
 public class NoLista<T> {
   private T info;
