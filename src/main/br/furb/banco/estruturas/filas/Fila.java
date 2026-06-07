@@ -1,4 +1,4 @@
-package src.main.java.br.furb.banco.estruturas.filas;
+package java.br.furb.banco.estruturas.filas;
 
 public interface Fila<T> {
   public void inserir(T valor);

@@ -1,5 +1,7 @@
-package src.main.java.br.furb.banco.estruturas.filas;
-import src.main.java.br.furb.banco.estruturas.listas.*;
+package java.br.furb.banco.estruturas.filas;
+import java.br.furb.banco.estruturas.listas.*;
+
+import java.br.furb.banco.estruturas.listas.ListaEncadeada;
 
 public class FilaLista<T> implements Fila<T> {
   private ListaEncadeada<T> lista = new ListaEncadeada<>();

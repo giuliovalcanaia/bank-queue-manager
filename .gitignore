@@ -25,3 +25,6 @@ replay_pid*
 
 # Pasta da IDE
 .idea/
+
+# Pasta de saida e build
+out/
