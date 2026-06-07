@@ -1,7 +1,10 @@
+package src.main.java.br.furb.banco.estruturas.listas;
+
 public class ListaEncadeada<T> {
   private NoLista<T> primeiro;
+  private NoLista<T> ultimo;
 
-  ListaEncadeada() {
+  public ListaEncadeada() {
     this.primeiro = null;
   }
 
@@ -9,19 +12,33 @@ public class ListaEncadeada<T> {
     return this.primeiro;
   }
 
+  public NoLista<T> getUltimo() {
+    return ultimo;
+  }
+
   public void inserir(T valor) {
     NoLista<T> novo = new NoLista<>();
-    novo.info = valor;
+    novo.setInfo(valor);
     novo.setProximo(this.primeiro);
     this.primeiro = novo;
   }
 
-  public Boolean estaVazia() {
-    if (primeiro == null) {
-      return true;
+  public void inserirNoFinal(T valor) {
+    NoLista<T> novo = new NoLista<>();
+    novo.setInfo(valor);
+    novo.setProximo(null);
+
+    if (this.estaVazia()) {
+      this.primeiro = novo;
     } else {
-      return false;
+      this.ultimo.setProximo(novo);
     }
+    this.ultimo = novo;
+  }
+
+
+  public Boolean estaVazia() {
+    return primeiro == null;
   }
 
   public NoLista<T> buscar(T valor) {
@@ -83,21 +100,16 @@ public class ListaEncadeada<T> {
   }
 
   @Override
-  // Falta implementar a formatação para o último objeto
   public String toString() {
-    String lista = new String();
-    NoLista<T> ponteiro = new NoLista<>();
-    ponteiro = this.primeiro;
+    String lista = "";
+    NoLista<T> ponteiro = this.primeiro;
 
     while (ponteiro != null) {
-      if (ponteiro == this.primeiro) {
-        lista = (String) ponteiro.info + ", ";
-      }
       if (ponteiro.getProximo() == null) {
         lista = lista + ponteiro.getInfo();
-        return lista;
+      } else {
+        lista = lista + ponteiro.getInfo() + ", ";
       }
-      lista = lista + ponteiro.getInfo() + ", ";
       ponteiro = ponteiro.getProximo();
     }
     return lista;

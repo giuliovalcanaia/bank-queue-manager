@@ -1,5 +1,7 @@
+package src.main.java.br.furb.banco.estruturas.listas;
+
 public class NoLista<T> {
-  T info;
+  private T info;
   private NoLista<T> proximo;
 
   public T getInfo() {
