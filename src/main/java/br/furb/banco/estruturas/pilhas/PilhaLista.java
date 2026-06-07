@@ -1,4 +1,6 @@
-package br.com.aula;
+package src.main.java.br.furb.banco.estruturas.pilhas;
+
+import src.main.java.br.furb.banco.estruturas.listas.*;
 
 public class PilhaLista <T> implements Pilha <T>{
   private ListaEncadeada<T> lista;

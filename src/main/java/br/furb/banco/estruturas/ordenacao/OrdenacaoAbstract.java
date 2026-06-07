@@ -1,4 +1,4 @@
-package AlgoritmosEEstruturaDeDados.Ordenacao.BubbleQuickMerge;
+package src.main.java.br.furb.banco.estruturas.ordenacao;
 
 public abstract class OrdenacaoAbstract <T extends Comparable<T>> {
     private T[] info;

@@ -1,4 +1,4 @@
-package br.com.aula;
+package src.main.java.br.furb.banco.estruturas.pilhas;
 
 public interface Pilha <T> {
   void push (T v);
