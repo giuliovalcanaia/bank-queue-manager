@@ -1,4 +1,4 @@
-package java.br.furb.banco.estruturas.pilhas;
+package br.furb.banco.estruturas.pilhas;
 
 public class PilhaCheiaException extends RuntimeException{
   public PilhaCheiaException() {

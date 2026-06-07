@@ -1,4 +1,4 @@
-package src.main.java.br.furb.banco.servicos;
+package br.furb.banco.servicos;
 
 public class GerenciadorAtendimento {
 }

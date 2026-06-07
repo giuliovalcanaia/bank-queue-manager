@@ -1,4 +1,4 @@
-package src.main.java.br.furb.banco.modelos;
+package br.furb.banco.modelos;
 
 public enum TipoGuiche {
 }

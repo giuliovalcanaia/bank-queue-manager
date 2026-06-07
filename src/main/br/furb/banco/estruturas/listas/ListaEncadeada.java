@@ -1,4 +1,4 @@
-package java.br.furb.banco.estruturas.listas;
+package br.furb.banco.estruturas.listas;
 
 public class ListaEncadeada<T> {
   private NoLista<T> primeiro;

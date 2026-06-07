@@ -1,4 +1,4 @@
-package src.main.java.br.furb.banco.estruturas.ordenacao;
+package br.furb.banco.estruturas.ordenacao;
 
 public class OrdenacaoQuickSort<T extends Comparable<T>> extends OrdenacaoAbstract<T> {
     int contadorTrocas = 0;

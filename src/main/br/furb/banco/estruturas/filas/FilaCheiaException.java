@@ -1,4 +1,4 @@
-package java.br.furb.banco.estruturas.filas;
+package br.furb.banco.estruturas.filas;
 
 public class FilaCheiaException extends RuntimeException {
     public FilaCheiaException() {

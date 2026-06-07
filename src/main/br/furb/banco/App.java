@@ -1,4 +1,4 @@
-package src.main.java.br.furb.banco;
+package br.furb.banco;
 
 public class App {
 }

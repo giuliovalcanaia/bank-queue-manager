@@ -1,4 +1,4 @@
-package java.br.furb.banco.estruturas.listas;
+package br.furb.banco.estruturas.listas;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
