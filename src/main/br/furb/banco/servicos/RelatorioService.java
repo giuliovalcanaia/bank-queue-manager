@@ -4,6 +4,8 @@ import br.furb.banco.estruturas.pilhas.PilhaLista;
 import br.furb.banco.estruturas.ordenacao.OrdenacaoQuickSort;
 import br.furb.banco.modelos.Guiche;
 import br.furb.banco.modelos.RegistroAtendimento;
+import br.furb.banco.utils.RegistroPorHorario;
+import br.furb.banco.utils.RegistroPorTempo;
 
 /**
  * Classe responsável por consolidar as métricas e gerar os relatórios do sistema.
@@ -17,9 +19,7 @@ public class RelatorioService {
     public void imprimirRelatorio(GerenciadorAtendimento gerenciador) {
         Guiche[] guiches = gerenciador.getGuiches();
 
-        System.out.println("=================================================");
-        System.out.println("             RELATÓRIO DE ATENDIMENTOS           ");
-        System.out.println("=================================================");
+        System.out.println("Relatório de atendimentos");
 
         int totalGeralAtendimentos = 0;
         int totalGeralNormal = 0;
@@ -28,7 +28,7 @@ public class RelatorioService {
         long tempoEsperaTotalNormal = 0;
         long tempoEsperaTotalPrioritario = 0;
 
-        // 1. Calcula o tamanho para o vetor primitivo
+        // 1. Calcula o tamanho para o vetor
         for (Guiche g : guiches) {
             totalGeralAtendimentos += g.getHistoricoAtendimentos().tamanho();
         }
@@ -98,7 +98,6 @@ public class RelatorioService {
         } else {
             System.out.println("Tempo Médio (Normais): 0 min");
         }
-        System.out.println("=================================================");
 
         // 4. Executa as ordenações utilizando o QuickSort fornecido
         if (totalGeralAtendimentos > 0) {
@@ -106,13 +105,10 @@ public class RelatorioService {
         }
     }
 
-    /**
-     * Lida com a restrição do Comparable aplicando o padrão Wrapper.
-     */
     private void imprimirOrdenacoes(RegistroAtendimento[] registros) {
 
         // --- ORDENAÇÃO 1: POR TEMPO DE ESPERA ---
-        System.out.println("\nRELAÇÃO DE ATENDIMENTOS (Ordem Crescente de Tempo de Espera):");
+        System.out.println("RELAÇÃO DE ATENDIMENTOS (Ordem Crescente de Tempo de Espera):");
 
         RegistroPorTempo[] arrayTempo = new RegistroPorTempo[registros.length];
         for (int i = 0; i < registros.length; i++) {
@@ -120,15 +116,15 @@ public class RelatorioService {
         }
 
         OrdenacaoQuickSort<RegistroPorTempo> quickTempo = new OrdenacaoQuickSort<>();
-        quickTempo.setInfo(arrayTempo); // Assumindo que setInfo existe em OrdenacaoAbstract
-        quickTempo.ordenar(); // Inicia o algoritmo que usa compareTo internamente
+        quickTempo.setInfo(arrayTempo);
+        quickTempo.ordenar();
 
         for (RegistroPorTempo rt : arrayTempo) {
-            System.out.println(rt.registro.toString());
+            System.out.println(rt.getRegistro().toString());
         }
 
         // --- ORDENAÇÃO 2: POR ORDEM CRONOLÓGICA ---
-        System.out.println("\nRELAÇÃO DE ATENDIMENTOS (Ordem Cronológica - Horário Atendimento):");
+        System.out.println("RELAÇÃO DE ATENDIMENTOS (Ordem Cronológica - Horário Atendimento):");
 
         RegistroPorHorario[] arrayHorario = new RegistroPorHorario[registros.length];
         for (int i = 0; i < registros.length; i++) {
@@ -144,33 +140,4 @@ public class RelatorioService {
         }
     }
 
-    // =========================================================================
-    // CLASSES WRAPPERS (Envolvem o Registro para ditar a regra do Comparable)
-    // =========================================================================
-
-    private static class RegistroPorTempo implements Comparable<RegistroPorTempo> {
-        RegistroAtendimento registro;
-
-        RegistroPorTempo(RegistroAtendimento registro) {
-            this.registro = registro;
-        }
-
-        @Override
-        public int compareTo(RegistroPorTempo outro) {
-            return Long.compare(this.registro.getTempoEsperaMinutos(), outro.registro.getTempoEsperaMinutos());
-        }
-    }
-
-    private static class RegistroPorHorario implements Comparable<RegistroPorHorario> {
-        RegistroAtendimento registro;
-
-        RegistroPorHorario(RegistroAtendimento registro) {
-            this.registro = registro;
-        }
-
-        @Override
-        public int compareTo(RegistroPorHorario outro) {
-            return this.registro.getHorarioInicioAtendimento().compareTo(outro.registro.getHorarioInicioAtendimento());
-        }
-    }
 }
