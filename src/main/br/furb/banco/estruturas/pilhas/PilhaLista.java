@@ -51,4 +51,8 @@ public class PilhaLista <T> implements Pilha <T>{
     return lista.toString();
   }
 
+  public int tamanho() {
+    return lista.obterComprimento();
+  }
+
 }
