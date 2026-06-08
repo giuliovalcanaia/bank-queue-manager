@@ -1,7 +1,7 @@
 ```mermaid
 classDiagram
 
-    %% ─── INTERFACES ───────────────────────────────────────────
+    %% INTERFACES
 
     class Pilha~T~ {
         <<interface>>
@@ -21,7 +21,7 @@ classDiagram
         +liberar() void
     }
 
-    %% ─── ESTRUTURAS ───────────────────────────────────────────
+    %% ESTRUTURAS
 
     class NoLista~T~ {
         -info: T
@@ -84,26 +84,24 @@ classDiagram
         +FilaCheiaException()
     }
 
-    %% ─── ORDENAÇÃO ────────────────────────────────────────────
+    %% ORDENAÇÃO
 
-    class OrdenacaoAbstract~T~ {
+    class OrdenacaoAbstract~T extends Comparable~ {
         <<abstract>>
         -info: T[]
-        #tempoExecucao: double
         +getInfo() T[]
         +setInfo(info: T[]) void
         +trocar(a: int, b: int) void
         +ordenar()* void
-        +ordenarComCronometro() void
     }
 
-    class OrdenacaoQuickSort~T~ {
+    class OrdenacaoQuickSort~T extends Comparable~ {
         +ordenar() void
         -quickSort(inicio: int, fim: int) void
         -particionar(inicio: int, fim: int) int
     }
 
-    %% ─── MODELOS ──────────────────────────────────────────────
+    %% MODELOS
 
     class TipoGuiche {
         <<enumeration>>
@@ -155,7 +153,7 @@ classDiagram
         +toString() String
     }
 
-    %% ─── UTILS ────────────────────────────────────────────────
+    %% UTILS
 
     class RegistroPorTempo {
         -registro: RegistroAtendimento
@@ -171,7 +169,7 @@ classDiagram
         +compareTo(outro: RegistroPorHorario) int
     }
 
-    %% ─── SERVIÇOS ─────────────────────────────────────────────
+    %% SERVIÇOS
 
     class GerenciadorAtendimento {
         -filaPrioridade: FilaLista~Cliente~
@@ -191,7 +189,7 @@ classDiagram
         -imprimirOrdenacoes(registros: RegistroAtendimento[]) void
     }
 
-    %% ─── RELAÇÕES ─────────────────────────────────────────────
+    %% RELAÇÕES
 
     %% Implementações de interface
     PilhaLista~T~        ..|>  Pilha~T~
@@ -210,7 +208,7 @@ classDiagram
     FilaVaziaException   --|>  RuntimeException
     FilaCheiaException   --|>  RuntimeException
 
-    %% Composição / Dependência estrutural
+    %% Composição
     ListaEncadeada~T~    "1"  *--  "0..*"  NoLista~T~
     PilhaLista~T~        "1"  *--  "1"     ListaEncadeada~T~
     FilaLista~T~         "1"  *--  "1"     ListaEncadeada~T~
