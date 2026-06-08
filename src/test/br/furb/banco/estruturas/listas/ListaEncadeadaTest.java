@@ -1,6 +1,7 @@
 package br.furb.banco.estruturas.listas;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -13,21 +14,21 @@ public class ListaEncadeadaTest {
         lista = new ListaEncadeada<>();
     }
 
-    // Caso 1: Verificar se é reconhecida lista vazia
     @Test
+    @DisplayName("Caso 1: Verificar se é reconhecida lista vazia")
     public void testCaso01ListaVazia() {
         assertTrue(lista.estaVazia(), "A lista recém-construída deve estar vazia.");
     }
 
-    // Caso 2: Verificar se é reconhecida lista não vazia
     @Test
+    @DisplayName("Caso 2: Verificar se é reconhecida lista não vazia")
     public void testCaso02ListaNaoVazia() {
         lista.inserir(5);
         assertFalse(lista.estaVazia(), "A lista não deve estar vazia após adicionar um elemento.");
     }
 
-    // Caso 3: Validar inclusão de um número
     @Test
+    @DisplayName("Caso 3: Validar inclusão de um número")
     public void testCaso03InclusaoDeUmNumero() {
         lista.inserir(5);
         NoLista<Integer> primeiro = lista.getPrimeiro();
@@ -37,8 +38,9 @@ public class ListaEncadeadaTest {
         assertNull(primeiro.getProximo(), "Não deve haver mais nós na lista.");
     }
 
-    // Caso 4: Validar inclusão de 3 números
+
     @Test
+    @DisplayName("Caso 4: Validar inclusão de 3 números")
     public void testCaso04InclusaoDeTresNumeros() {
         lista.inserir(5);
         lista.inserir(10);
@@ -59,8 +61,9 @@ public class ListaEncadeadaTest {
         assertNull(no3.getProximo(), "Deve haver apenas 3 nós.");
     }
 
-    // Caso 5: Validar busca de dados na lista na primeira posição
+
     @Test
+    @DisplayName("Caso 5: Validar busca de dados na lista na primeira posição")
     public void testCaso05BuscarNaPrimeiraPosicao() {
         lista.inserir(5);
         lista.inserir(10);
@@ -72,8 +75,8 @@ public class ListaEncadeadaTest {
         assertEquals(20, no.getInfo());
     }
 
-    // Caso 6: Validar busca de dados no meio da lista
     @Test
+    @DisplayName("Caso 6: Validar busca de dados no meio da lista")
     public void testCaso06BuscarNoMeioDaLista() {
         lista.inserir(5);
         lista.inserir(10);
@@ -85,8 +88,8 @@ public class ListaEncadeadaTest {
         assertEquals(15, no.getInfo());
     }
 
-    // Caso 7: Validar busca de dado inexistente
     @Test
+    @DisplayName("Caso 7: Validar busca de dado inexistente")
     public void testCaso07BuscarDadoInexistente() {
         lista.inserir(5);
         lista.inserir(10);
@@ -97,8 +100,8 @@ public class ListaEncadeadaTest {
         assertNull(no, "A busca por um dado inexistente deve retornar null.");
     }
 
-    // Caso 8: Validar exclusão de primeiro elemento da lista
     @Test
+    @DisplayName("Caso 8: Validar exclusão de primeiro elemento da lista")
     public void testCaso08ExclusaoPrimeiroElemento() {
         lista.inserir(5);
         lista.inserir(10);
@@ -113,8 +116,8 @@ public class ListaEncadeadaTest {
         assertNull(lista.getPrimeiro().getProximo().getProximo().getProximo(), "A lista deve conter apenas 15, 10 e 5.");
     }
 
-    // Caso 9: Validar exclusão de elemento do meio da lista
     @Test
+    @DisplayName("Caso 9: Validar exclusão de elemento do meio da lista")
     public void testCaso09ExclusaoElementoMeio() {
         lista.inserir(5);
         lista.inserir(10);
@@ -129,8 +132,8 @@ public class ListaEncadeadaTest {
         assertNull(lista.getPrimeiro().getProximo().getProximo().getProximo(), "A lista deve conter apenas 20, 10 e 5.");
     }
 
-    // Caso 10: Validar que obterNo() retorna nó da posição 0
     @Test
+    @DisplayName("Caso 10: Validar que obterNo() retorna nó da posição 0")
     public void testCaso10ObterNoPosicaoZero() {
         lista.inserir(5);
         lista.inserir(10);
@@ -142,8 +145,8 @@ public class ListaEncadeadaTest {
         assertEquals(20, no.getInfo(), "O nó da posição 0 deve armazenar 20.");
     }
 
-    // Caso 11: Validar que obterNo() retorna nó da última posição
     @Test
+    @DisplayName("Caso 11: Validar que obterNo() retorna nó da última posição")
     public void testCaso11ObterNoUltimaPosicao() {
         lista.inserir(5);
         lista.inserir(10);
@@ -155,8 +158,8 @@ public class ListaEncadeadaTest {
         assertEquals(5, no.getInfo(), "O nó da posição 3 deve armazenar 5.");
     }
 
-    // Caso 12: Validar que obterNo() recusa tentativa de ler posição inválida
     @Test
+    @DisplayName("Caso 12: Validar que obterNo() recusa tentativa de ler posição inválida")
     public void testCaso12ObterNoPosicaoInvalida() {
         lista.inserir(5);
         lista.inserir(10);
@@ -168,14 +171,14 @@ public class ListaEncadeadaTest {
         }, "Acesso a posição inválida deve lançar IndexOutOfBoundsException.");
     }
 
-    // Caso 13: Validar método obterComprimento() para lista vazia
     @Test
+    @DisplayName("Caso 13: Validar método obterComprimento() para lista vazia")
     public void testCaso13ObterComprimentoListaVazia() {
         assertEquals(0, lista.obterComprimento(), "O comprimento de uma lista vazia deve ser 0.");
     }
 
-    // Caso 14: Validar método obterComprimento() para lista não vazia
     @Test
+    @DisplayName("Caso 14: Validar método obterComprimento() para lista não vazia")
     public void testCaso14ObterComprimentoListaNaoVazia() {
         lista.inserir(5);
         lista.inserir(10);
