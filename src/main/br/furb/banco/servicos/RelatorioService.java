@@ -14,7 +14,7 @@ public class RelatorioService {
 
     /**
      * Imprime o relatório completo de atendimentos.
-     * @param gerenciador O gerenciador contendo os guichês e seus históricos.
+     * @param gerenciador O gerenciador contendo os guichês e os seus históricos.
      */
     public void imprimirRelatorio(GerenciadorAtendimento gerenciador) {
         Guiche[] guiches = gerenciador.getGuiches();
@@ -105,6 +105,12 @@ public class RelatorioService {
         }
     }
 
+    /**
+     * Imprime duas listas: a ordem de atendimentos por tempo de espera
+     * e por ordem cronológica
+     * @param registros O array RegistroAtendimento[] contendo os registros feitos
+     *                  ao longo do dia.
+     */
     private void imprimirOrdenacoes(RegistroAtendimento[] registros) {
 
         // --- ORDENAÇÃO 1: POR TEMPO DE ESPERA ---
