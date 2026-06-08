@@ -1,3 +1,123 @@
+# Sistema gerenciador de fila de atendimento bancário 
+## Diagrama de classes simplificado
+Contém as classes do projeto com excessão das classes de estruturas de dados
+```mermaid
+classDiagram
+
+    %% MODELOS
+
+    class TipoGuiche {
+        <<enumeration>>
+        PREFERENCIAL
+        GERAL
+        -descricao: String
+        +getDescricao() String
+        +toString() String
+    }
+
+    class Cliente {
+        -id: int
+        -prioritario: boolean
+        -horarioChegada: LocalTime
+        +getId() int
+        +isPrioritario() boolean
+        +getHorarioChegada() LocalTime
+        +setId(id: int) void
+        +setPrioritario(prioritario: boolean) void
+        +setHorarioChegada(horarioChegada: LocalTime) void
+        +toString() String
+    }
+
+    class RegistroAtendimento {
+        -cliente: Cliente
+        -horarioInicioAtendimento: LocalTime
+        -tempoAtendimento: int
+        +getTempoEsperaMinutos() long
+        +getCliente() Cliente
+        +getHorarioInicioAtendimento() LocalTime
+        +getTempoAtendimento() int
+        +getIdCliente() int
+        +getHorarioEntradaFila() LocalTime
+        +getPrioridade() String
+        +toString() String
+        -simularTempoAtendimento() int
+    }
+
+    class Guiche {
+        -id: int
+        -tipo: TipoGuiche
+        -historicoAtendimentos: PilhaLista~RegistroAtendimento~
+        -ultimoFoiPrioridade: boolean
+        +registrarAtendimento(registro: RegistroAtendimento) void
+        +getId() int
+        +getTipo() TipoGuiche
+        +getHistoricoAtendimentos() PilhaLista~RegistroAtendimento~
+        +isUltimoFoiPrioridade() boolean
+        +toString() String
+    }
+
+    %% UTILS
+
+    class RegistroPorTempo {
+        -registro: RegistroAtendimento
+        +getRegistro() RegistroAtendimento
+        +setRegistro(registro: RegistroAtendimento) void
+        +compareTo(outro: RegistroPorTempo) int
+    }
+
+    class RegistroPorHorario {
+        +registro: RegistroAtendimento
+        +getRegistro() RegistroAtendimento
+        +setRegistro(registro: RegistroAtendimento) void
+        +compareTo(outro: RegistroPorHorario) int
+    }
+
+    %% SERVIÇOS
+
+    class GerenciadorAtendimento {
+        -filaPrioridade: FilaLista~Cliente~
+        -filaNormal: FilaLista~Cliente~
+        -guiches: Guiche[]
+        +GerenciadorAtendimento(qtdGuicheNormal: int, qtdGuichePrioridade: int)
+        +adicionarCliente(cliente: Cliente) void
+        +chamarProximo(idGuiche: int, horarioAtual: LocalTime) RegistroAtendimento
+        -encontrarGuichePorId(id: int) Guiche
+        +getGuiches() Guiche[]
+        +getFilaPrioridade() FilaLista~Cliente~
+        +getFilaNormal() FilaLista~Cliente~
+    }
+
+    class RelatorioService {
+        +imprimirRelatorio(gerenciador: GerenciadorAtendimento) void
+        -imprimirOrdenacoes(registros: RegistroAtendimento[]) void
+    }
+
+    %% RELAÇÕES
+
+    %% Comparable
+    RegistroPorTempo     ..|>  Comparable
+    RegistroPorHorario   ..|>  Comparable
+
+    %% Modelos
+    RegistroAtendimento  "1"  *--  "1"  Cliente
+    Guiche               "1"  *--  "1"  TipoGuiche
+    Guiche               "1"  *--  "1"  PilhaLista~T~
+
+    %% Utils
+    RegistroPorTempo     "1"  *--  "1"  RegistroAtendimento
+    RegistroPorHorario   "1"  *--  "1"  RegistroAtendimento
+
+    %% Serviços
+    GerenciadorAtendimento  "1"  *--  "1..*"  Guiche
+    GerenciadorAtendimento  "1"  *--  "1"     FilaLista~T~
+    RelatorioService         -->              GerenciadorAtendimento
+    RelatorioService         -->              OrdenacaoQuickSort~T~
+    RelatorioService         -->              RegistroPorTempo
+    RelatorioService         -->              RegistroPorHorario
+```
+
+## Diagrama de classes completo
+Contém o diagrama de todas as classes, inclusive relativo às classes das estruturas de dados
 ```mermaid
 classDiagram
 
