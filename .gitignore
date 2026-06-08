@@ -31,5 +31,4 @@ out/
 
 # Pasta de saída do gradle
 .gradle/
-gradle/
 build/
