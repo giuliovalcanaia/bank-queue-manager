@@ -1,0 +1,40 @@
+plugins {
+    id 'java'
+}
+
+group = 'br.furb.banco'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+// Configuração para o Gradle entender a estrutura do projeto
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main']
+        }
+    }
+    test {
+        java {
+            srcDirs = ['src/test']
+        }
+    }
+}
+
+dependencies {
+    // Agrupa e alinha as versões do JUnit 5
+    testImplementation platform('org.junit:junit-bom:5.10.2')
+
+    // O motor do JUnit Jupiter para escrever os testes (ex: @Test, @BeforeEach)
+    testImplementation 'org.junit.jupiter:junit-jupiter-api'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+
+    // O carinha que o Gradle reclamou que estava faltando para iniciar os testes:
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+test {
+    useJUnitPlatform()
+}

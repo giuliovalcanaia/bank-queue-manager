@@ -1,0 +1,30 @@
+name: Testes Automatizados (Gradle)
+
+# Qualquer push ou pull request nas branches principais dispara o teste
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 1. Baixar o código do repositório
+        uses: actions/checkout@v4
+
+      - name: 2. Configurar o Java (JDK 17)
+        uses: actions/setup-java@v4
+        with:
+          # Versão java para testes
+          java-version: '25'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: 3. Dar permissão ao script do Gradle
+        run: chmod +x gradlew
+
+      - name: 4. Executar os Testes
+        run: ./gradlew test
