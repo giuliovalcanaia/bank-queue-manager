@@ -1,9 +1,19 @@
-package br.furb.banco.modelos;
+package br.furb.banco.utils;
+
+import br.furb.banco.modelos.RegistroAtendimento;
 
 public class RegistroPorTempo implements Comparable<RegistroPorTempo> {
-    RegistroAtendimento registro;
+    private RegistroAtendimento registro;
 
-    RegistroPorTempo(RegistroAtendimento registro) {
+    public RegistroPorTempo(RegistroAtendimento registro) {
+        this.registro = registro;
+    }
+
+    public RegistroAtendimento getRegistro() {
+        return registro;
+    }
+
+    public void setRegistro(RegistroAtendimento registro) {
         this.registro = registro;
     }
 
