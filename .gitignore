@@ -28,3 +28,8 @@ replay_pid*
 
 # Pasta de saida e build
 out/
+
+# Pasta de saída do gradle
+.gradle/
+gradle/
+build/
