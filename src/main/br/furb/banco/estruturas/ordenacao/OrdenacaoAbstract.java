@@ -2,7 +2,6 @@ package br.furb.banco.estruturas.ordenacao;
 
 public abstract class OrdenacaoAbstract <T extends Comparable<T>> {
     private T[] info;
-    protected double tempoExecucao = 0.0;
 
     public T[] getInfo() {
         return info;
@@ -20,16 +19,4 @@ public abstract class OrdenacaoAbstract <T extends Comparable<T>> {
     }
 
     public abstract void ordenar();
-
-    public void ordenarComCronometro() {
-        long tempoInicio = System.nanoTime();
-
-        ordenar();
-
-        long tempoFim = System.nanoTime();
-        this.tempoExecucao = (tempoFim - tempoInicio) / 1_000_000.0;
-
-        System.out.println("Tempo de execução: " + this.tempoExecucao + " ms");
-        System.out.println("----------------------------------------------------------\n");
-    }
 }
