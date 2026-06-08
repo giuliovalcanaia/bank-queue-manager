@@ -1,32 +1,32 @@
 package br.furb.banco.estruturas.ordenacao;
 
-public class OrdenacaoBolha<T extends Comparable<T>> extends OrdenacaoAbstract<T>{
+import br.furb.banco.estruturas.ordenacao.OrdenacaoAbstract;
+
+public class OrdenacaoBolha<T extends Comparable<T>> extends OrdenacaoAbstract<T> {
 
     @Override
     public void ordenar() {
-        int i;
-        int j;
-        int n = getInfo().length;
-        int contadorTrocas = 0;
-        int contadorCiclos = 0;
-        int contadorComparacoes = 0;
+        T[] info = getInfo();
 
-        for (i = n - 1; i > 0; i--) {
-            contadorCiclos++;
-            for (j = 0; j < i; j++) {
-                contadorComparacoes++;
-                // Compara os valores nas posições j e o seu sucessor. Caso seja verdadeiro,
-                // troca j com o seu sucessor.
-                if (getInfo()[j].compareTo(getInfo()[j + 1]) > 0) {
-                    trocar(j, (j + 1));
-                    contadorTrocas++;
+        // Prevenção contra NullPointerException caso o vetor não tenha sido inicializado
+        if (info == null) {
+            return;
+        }
+
+        int n = info.length;
+
+        // Laço externo: controla a quantidade de varreduras no vetor
+        for (int i = 0; i < n - 1; i++) {
+
+            // Laço interno: empurra o maior elemento para o final do vetor
+            for (int j = 0; j < n - 1 - i; j++) {
+
+                // Se o elemento atual for maior que o próximo, eles trocam de posição.
+                // Como T é um objeto, usamos o compareTo(), que retorna um valor > 0 se o primeiro for maior.
+                if (info[j].compareTo(info[j + 1]) > 0) {
+                    trocar(j, j + 1); // Método implementado na classe abstrata
                 }
             }
         }
-        System.out.println("------------------- Ordenação Bolha ---------------------");
-        System.out.println("Trocas: " + contadorTrocas);
-        System.out.println("Ciclos: " + contadorCiclos);
-        System.out.println("Comparações: " + contadorComparacoes);
-        System.out.println("----------------------------------------------------------");
     }
 }

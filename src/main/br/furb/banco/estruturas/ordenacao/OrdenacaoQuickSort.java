@@ -1,57 +1,55 @@
 package br.furb.banco.estruturas.ordenacao;
 
 public class OrdenacaoQuickSort<T extends Comparable<T>> extends OrdenacaoAbstract<T> {
-    int contadorTrocas = 0;
-    int contadorCiclos = 0;
-    int contadorComparacoes = 0;
 
     @Override
     public void ordenar() {
-        int n = getInfo().length - 1;
-        quickSort(0,n);
+        T[] info = getInfo();
 
-        System.out.println("-------------------- Quick Sort --------------------------");
-        System.out.println("Trocas: " + contadorTrocas);
-        System.out.println("Ciclos: " + contadorCiclos);
-        System.out.println("Comparações: " + contadorComparacoes);
-        System.out.println("----------------------------------------------------------");
+        if (info == null || info.length <= 1) {
+            return; // Vetor vazio ou com 1 elemento já está ordenado
+        }
+
+        // Inicia a recursão englobando todo o vetor (do índice 0 ao último)
+        quickSort(0, info.length - 1);
     }
 
     private void quickSort(int inicio, int fim) {
         if (inicio < fim) {
-            int idxPivo = particionar(inicio, fim);
-            quickSort(inicio, idxPivo - 1);
-            quickSort(idxPivo+1, fim);
+            // Particiona o vetor e descobre a posição definitiva do pivô
+            int posicaoPivo = particionar(inicio, fim);
+
+            // Chama o quickSort recursivamente para a metade à esquerda do pivô
+            quickSort(inicio, posicaoPivo - 1);
+
+            // Chama o quickSort recursivamente para a metade à direita do pivô
+            quickSort(posicaoPivo + 1, fim);
         }
     }
 
     private int particionar(int inicio, int fim) {
-        int a = inicio;
-        int b = fim + 1;
-        T pivo = getInfo()[inicio];
+        T[] info = getInfo();
 
-        while (true) {
-            contadorCiclos++;
-            do {
-                a = a + 1;
-                contadorComparacoes++;
-            } while (a <= fim && getInfo()[a].compareTo(pivo) < 0);
+        // Escolhemos o último elemento como pivô
+        T pivo = info[fim];
 
-            do {
-                b = b - 1;
-                contadorComparacoes++;
-            } while (b >= inicio && getInfo()[b].compareTo(pivo) > 0);
+        // 'i' será o índice do último elemento menor que o pivô encontrado
+        int i = inicio - 1;
 
-            if (a >= b) {
-                break;
+        // Varre o subvetor do 'inicio' até 'fim - 1'
+        for (int j = inicio; j < fim; j++) {
+
+            // Se o elemento atual for menor ou igual ao pivô
+            if (info[j].compareTo(pivo) <= 0) {
+                i++; // Avança o limite dos menores
+                trocar(i, j); // Coloca o elemento menor na porção esquerda
             }
-
-            trocar(a, b);
-            contadorTrocas++;
         }
 
-        trocar(b, inicio);
-        contadorTrocas++;
-        return b;
+        // Coloca o pivô exatamente na sua posição correta (logo após os menores que ele)
+        trocar(i + 1, fim);
+
+        // Retorna a posição final do pivô para que o quickSort saiba onde dividir o vetor nas próximas chamadas
+        return i + 1;
     }
 }
