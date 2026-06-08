@@ -1,7 +1,5 @@
 package br.furb.banco.estruturas.ordenacao;
 
-import br.furb.banco.estruturas.ordenacao.OrdenacaoAbstract;
-
 public class OrdenacaoBolha<T extends Comparable<T>> extends OrdenacaoAbstract<T> {
 
     @Override
