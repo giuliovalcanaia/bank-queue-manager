@@ -1,4 +1,4 @@
-```Mermaid
+```mermaid
 classDiagram
 
     %% ─── INTERFACES ───────────────────────────────────────────
