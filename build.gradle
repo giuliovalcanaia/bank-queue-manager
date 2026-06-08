@@ -24,14 +24,11 @@ sourceSets {
 }
 
 dependencies {
-    // Agrupa e alinha as versões do JUnit 5
     testImplementation platform('org.junit:junit-bom:5.10.2')
 
-    // O motor do JUnit Jupiter para escrever os testes (ex: @Test, @BeforeEach)
     testImplementation 'org.junit.jupiter:junit-jupiter-api'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 
-    // O carinha que o Gradle reclamou que estava faltando para iniciar os testes:
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
