@@ -4,13 +4,14 @@ import br.furb.banco.estruturas.pilhas.PilhaLista;
 import br.furb.banco.estruturas.ordenacao.OrdenacaoQuickSort;
 import br.furb.banco.modelos.Guiche;
 import br.furb.banco.modelos.RegistroAtendimento;
+import br.furb.banco.modelos.TipoAtendimento;
 import br.furb.banco.utils.RegistroPorHorario;
 import br.furb.banco.utils.RegistroPorTempo;
 
 /**
  * Classe responsável por consolidar as métricas e gerar os relatórios do sistema.
  */
-public class RelatorioService {
+public class Relatorio {
 
     /**
      * Imprime o relatório completo de atendimentos.
@@ -28,7 +29,7 @@ public class RelatorioService {
         long tempoEsperaTotalNormal = 0;
         long tempoEsperaTotalPrioritario = 0;
 
-        // 1. Calcula o tamanho para o vetor
+        // Calcula o tamanho para o vetor
         for (Guiche g : guiches) {
             totalGeralAtendimentos += g.getHistoricoAtendimentos().tamanho();
         }
@@ -36,7 +37,7 @@ public class RelatorioService {
         RegistroAtendimento[] todosRegistros = new RegistroAtendimento[totalGeralAtendimentos];
         int indexArray = 0;
 
-        // 2. Coletar dados preservando a pilha original
+        // Coletar dados preservando a pilha original
         for (Guiche guiche : guiches) {
             int totalGuiche = 0;
             int normalGuiche = 0;
@@ -55,7 +56,7 @@ public class RelatorioService {
                 long tempoEspera = registro.getTempoEsperaMinutos();
                 tempoEsperaTotalGeral += tempoEspera;
 
-                if (registro.getCliente().isPrioritario()) {
+                if (registro.getCliente().getTipoAtendimento() == TipoAtendimento.PREFERENCIAL) {
                     prioritarioGuiche++;
                     totalGeralPrioritario++;
                     tempoEsperaTotalPrioritario += tempoEspera;
@@ -71,7 +72,7 @@ public class RelatorioService {
                 historico.push(pilhaTemp.pop());
             }
 
-            System.out.println("Guichê " + guiche.getId() + " (" + guiche.getTipo().getDescricao() + "):");
+            System.out.println("Guichê " + guiche.getId() + " (" + guiche.getTipoAtendimento().getDescricao() + "):");
             System.out.println("  - Total de atendimentos: " + totalGuiche);
             System.out.println("  - Normais: " + normalGuiche + " | Prioritários: " + prioritarioGuiche);
             System.out.println("-------------------------------------------------");
@@ -116,6 +117,7 @@ public class RelatorioService {
         // --- ORDENAÇÃO 1: POR TEMPO DE ESPERA ---
         System.out.println("RELAÇÃO DE ATENDIMENTOS (Ordem Crescente de Tempo de Espera):");
 
+        // Cria o array que será usado para ordenar
         RegistroPorTempo[] arrayTempo = new RegistroPorTempo[registros.length];
         for (int i = 0; i < registros.length; i++) {
             arrayTempo[i] = new RegistroPorTempo(registros[i]);
