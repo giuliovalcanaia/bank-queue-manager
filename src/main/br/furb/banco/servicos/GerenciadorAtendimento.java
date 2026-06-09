@@ -15,8 +15,9 @@ import java.util.Random;
 public class GerenciadorAtendimento {
 
     private FilaLista<Cliente> filaPrioridade;
-    private FilaLista<Cliente> filaNormal;
+    private FilaLista<Cliente> filaGeral;
     private Guiche[] guiches;
+    private int consecutivosPrioritariosGerais;
 
     /**
      * Construtor do Gerenciador. Inicializa as filas e os guichês.
@@ -25,7 +26,7 @@ public class GerenciadorAtendimento {
      */
     public GerenciadorAtendimento(int qtdGuicheNormal, int qtdGuichePrioridade) {
         this.filaPrioridade = new FilaLista<>();
-        this.filaNormal = new FilaLista<>();
+        this.filaGeral = new FilaLista<>();
         this.guiches = new Guiche[qtdGuicheNormal + qtdGuichePrioridade];
 
         int indexArray = 0;
@@ -55,8 +56,10 @@ public class GerenciadorAtendimento {
 
         if (cliente.getTipoAtendimento() == TipoAtendimento.PREFERENCIAL) {
             filaPrioridade.inserir(cliente);
+            System.out.println(cliente.getHorarioChegada() + " - Cliente com id " + cliente.getId() + " foi inserido na fila prioritária");
         } else {
-            filaNormal.inserir(cliente);
+            filaGeral.inserir(cliente);
+            System.out.println(cliente.getHorarioChegada() + " - Cliente com id " + cliente.getId() + " foi inserido na fila geral");
         }
     }
 
@@ -88,30 +91,30 @@ public class GerenciadorAtendimento {
         }
 
         // GUICHÊ GERAL: seguem a lógica de alternância equilibrada
-        else if (guiche.getTipoAtendimento() == TipoAtendimento.GERAL) {
-            // Se o último cliente atendido NESTE guichê foi prioritário, tenta equilibrar chamando a FilaNormal
-            // Se o último foi prioridade
-            if (guiche.isUltimoFoiPrioridade()) {
-                // e a fila normal não está vazia
-                if (!filaNormal.estaVazia()) {
-                    // chama o primeiro da fila normal
-                    clienteEscolhido = filaNormal.retirar();
-                // Caso a fila normal esteja vazia e a fila prioridade não está vazia
+        if (guiche.getTipoAtendimento() == TipoAtendimento.GERAL) {
+            // Se os guichês gerais já chamaram um prioritário
+            if (consecutivosPrioritariosGerais >= 1) {
+
+                // Tenta equilibrar chamando a FilaNormal
+                if (!filaGeral.estaVazia()) {
+                    clienteEscolhido = filaGeral.retirar();
+                    consecutivosPrioritariosGerais = 0;
+
+                // Fila normal vazia: não há como equilibrar, atende prioritário
                 } else if (!filaPrioridade.estaVazia()) {
-                    // chama o primeiro da fila prioridade
                     clienteEscolhido = filaPrioridade.retirar();
+                    consecutivosPrioritariosGerais++;
                 }
-            }
-            // Se o último NÃO foi prioritário (ou é o primeiro atendimento), a prioridade é da FilaPrioridade
-            else {
-                // Se a fila prioridade não está vazia
+            } else {
+                // Nenhum prioritário consecutivo pendente: prioriza FilaPrioridade
                 if (!filaPrioridade.estaVazia()) {
-                    // chama o primeiro da fila prioridade
                     clienteEscolhido = filaPrioridade.retirar();
-                  // Se a fila prioridade está vazia, mas a normal não
-                } else if (!filaNormal.estaVazia()) {
-                    // chama ao primeiro da fila normal
-                    clienteEscolhido = filaNormal.retirar();
+                    consecutivosPrioritariosGerais++;
+
+                } else if (!filaGeral.estaVazia()) {
+                    // Fila prioritária vazia: atende normal normalmente
+                    clienteEscolhido = filaGeral.retirar();
+                    consecutivosPrioritariosGerais = 0;
                 }
             }
         }
@@ -119,13 +122,13 @@ public class GerenciadorAtendimento {
         // Se um cliente foi selecionado pelas regras acima, cria o registro e salva na pilha do guichê
         if (clienteEscolhido != null) {
             Random tempoAtendimento = new Random();
-            RegistroAtendimento registro = new RegistroAtendimento(clienteEscolhido, horarioAtual, tempoAtendimento.nextInt(28) + 2);
+            RegistroAtendimento registro = new RegistroAtendimento(clienteEscolhido, horarioAtual, tempoAtendimento.nextInt(29) + 2);
             guiche.registrarAtendimento(registro);
-            System.out.println("Guichê " + guiche.getId() + " chamou " + registro.getCliente().toString());
+            System.out.println(horarioAtual + " - Guichê " + guiche.getId() + " chamou " + registro.getCliente().toString());
             return registro;
         }
         // Último caso possível: ambas as filas estavam vazias
-        System.out.println("Guichê " + guiche.getId() + " chamou mas a fila estava vazia");
+        System.out.println(horarioAtual + " - Guichê " + guiche.getId() + " chamou mas a fila estava vazia");
         return null;
     }
 
@@ -151,7 +154,7 @@ public class GerenciadorAtendimento {
         return filaPrioridade;
     }
 
-    public FilaLista<Cliente> getFilaNormal() {
-        return filaNormal;
+    public FilaLista<Cliente> getFilaGeral() {
+        return filaGeral;
     }
 }
