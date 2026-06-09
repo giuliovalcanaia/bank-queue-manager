@@ -15,8 +15,6 @@ public class App {
         GerenciadorAtendimento gerenciador = new GerenciadorAtendimento(2, 1);
 
         // ORDEM CRONOLÓGICA DOS EVENTOS
-        // Criação e chegada de objetos clientes
-        // Simultaneamente, faz a simulação de atendimento pelos guichês
         gerenciador.adicionarCliente(new Cliente(1, TipoAtendimento.GERAL, LocalTime.of(10, 0)));
         gerenciador.adicionarCliente(new Cliente(2, TipoAtendimento.PREFERENCIAL, LocalTime.of(10, 5)));
         gerenciador.adicionarCliente(new Cliente(3, TipoAtendimento.GERAL, LocalTime.of(10, 10)));
@@ -35,8 +33,6 @@ public class App {
         // Chega mais um cliente e então o guiche 1 chama
         gerenciador.adicionarCliente(new Cliente(7, TipoAtendimento.GERAL, LocalTime.of(11, 25)));
         gerenciador.chamarProximo(1, LocalTime.of(11, 25));
-
-
 
         // Gera o Relatório Final
         Relatorio relatorioService = new Relatorio();
