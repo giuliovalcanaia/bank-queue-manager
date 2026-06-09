@@ -7,6 +7,7 @@ import br.furb.banco.modelos.RegistroAtendimento;
 import br.furb.banco.modelos.TipoAtendimento;
 
 import java.time.LocalTime;
+import java.util.Random;
 
 /**
  * Classe responsável por gerenciar as filas de clientes e a lógica de atendimento dos guichês.
@@ -117,13 +118,14 @@ public class GerenciadorAtendimento {
 
         // Se um cliente foi selecionado pelas regras acima, cria o registro e salva na pilha do guichê
         if (clienteEscolhido != null) {
-            RegistroAtendimento registro = new RegistroAtendimento(clienteEscolhido, horarioAtual);
+            Random tempoAtendimento = new Random();
+            RegistroAtendimento registro = new RegistroAtendimento(clienteEscolhido, horarioAtual, tempoAtendimento.nextInt(28) + 2);
             guiche.registrarAtendimento(registro);
-            System.out.println("Guichế " + guiche.getId() + " chamou " + registro.getCliente().toString());
+            System.out.println("Guichê " + guiche.getId() + " chamou " + registro.getCliente().toString());
             return registro;
         }
         // Último caso possível: ambas as filas estavam vazias
-        System.out.println("Fila vazia");
+        System.out.println("Guichê " + guiche.getId() + " chamou mas a fila estava vazia");
         return null;
     }
 
