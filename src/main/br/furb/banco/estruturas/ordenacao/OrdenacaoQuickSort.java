@@ -4,52 +4,41 @@ public class OrdenacaoQuickSort<T extends Comparable<T>> extends OrdenacaoAbstra
 
     @Override
     public void ordenar() {
-        T[] info = getInfo();
-
-        if (info == null || info.length <= 1) {
-            return; // Vetor vazio ou com 1 elemento já está ordenado
-        }
-
-        // Inicia a recursão englobando todo o vetor (do índice 0 ao último)
-        quickSort(0, info.length - 1);
+        int n = getInfo().length - 1;
+        quickSort(0,n);
     }
 
     private void quickSort(int inicio, int fim) {
         if (inicio < fim) {
-            // Particiona o vetor e descobre a posição definitiva do pivô
-            int posicaoPivo = particionar(inicio, fim);
-
-            // Chama o quickSort recursivamente para a metade à esquerda do pivô
-            quickSort(inicio, posicaoPivo - 1);
-
-            // Chama o quickSort recursivamente para a metade à direita do pivô
-            quickSort(posicaoPivo + 1, fim);
+            int idxPivo = particionar(inicio, fim);
+            // Chama o lado esquerdo
+            quickSort(inicio, idxPivo - 1);
+            // Chama o lado direito
+            quickSort(idxPivo+1, fim);
         }
     }
 
     private int particionar(int inicio, int fim) {
-        T[] info = getInfo();
+        int a = inicio;
+        int b = fim + 1;
+        T pivo = getInfo()[inicio];
 
-        // Escolhemos o último elemento como pivô
-        T pivo = info[fim];
+        while (true) {
+            do {
+                a = a + 1;
+            } while (a <= fim && getInfo()[a].compareTo(pivo) < 0);
 
-        // 'i' será o índice do último elemento menor que o pivô encontrado
-        int i = inicio - 1;
+            do {
+                b = b - 1;
+            } while (b >= inicio && getInfo()[b].compareTo(pivo) > 0);
 
-        // Varre o subvetor do 'inicio' até 'fim - 1'
-        for (int j = inicio; j < fim; j++) {
-
-            // Se o elemento atual for menor ou igual ao pivô
-            if (info[j].compareTo(pivo) <= 0) {
-                i++; // Avança o limite dos menores
-                trocar(i, j); // Coloca o elemento menor na porção esquerda
+            if (a >= b) {
+                break;
             }
+            trocar(a, b);
         }
 
-        // Coloca o pivô exatamente na sua posição correta (logo após os menores que ele)
-        trocar(i + 1, fim);
-
-        // Retorna a posição final do pivô para que o quickSort saiba onde dividir o vetor nas próximas chamadas
-        return i + 1;
+        trocar(b, inicio);
+        return b;
     }
 }
