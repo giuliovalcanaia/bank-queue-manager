@@ -38,7 +38,7 @@ public class App {
 
 
 
-        // Geração do Relatório Final
+        // Gera o Relatório Final
         Relatorio relatorioService = new Relatorio();
         relatorioService.imprimirRelatorio(gerenciador);
 
