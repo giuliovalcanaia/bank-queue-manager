@@ -16,17 +16,17 @@ public class FilaListaTest {
     }
 
     @Test
-    @DisplayName("Caso 1: Conferir se o método estaVazia() reconhece fila vazia")
+    @DisplayName("Caso 1: Conferir se o método estaVazia reconhece fila vazia")
     void testeEstaVaziaReconheceFilaVazia() {
-        assertTrue(fila.estaVazia(), "Uma fila recém-criada deve retornar true para estaVazia()");
+        assertTrue(fila.estaVazia());
     }
 
     @Test
-    @DisplayName("Caso 2: Conferir se o método estaVazia() reconhece fila não vazia")
+    @DisplayName("Caso 2: Conferir se o método estaVazia reconhece fila não vazia")
     void testeEstaVaziaReconheceFilaNaoVazia() {
         fila.inserir(10);
 
-        assertFalse(fila.estaVazia(), "Após inserir um elemento, estaVazia() deve retornar false");
+        assertFalse(fila.estaVazia());
     }
 
     @Test
@@ -36,11 +36,11 @@ public class FilaListaTest {
         fila.inserir(20);
         fila.inserir(30);
 
-        assertEquals(10, fila.retirar(), "O primeiro elemento retirado deve ser 10");
-        assertEquals(20, fila.retirar(), "O segundo elemento retirado deve ser 20");
-        assertEquals(30, fila.retirar(), "O terceiro elemento retirado deve ser 30");
+        assertEquals(10, fila.retirar());
+        assertEquals(20, fila.retirar());
+        assertEquals(30, fila.retirar());
 
-        assertTrue(fila.estaVazia(), "Após retirar todos os elementos, a fila deve estar vazia");
+        assertTrue(fila.estaVazia());
     }
 
     @Test
@@ -50,8 +50,8 @@ public class FilaListaTest {
         fila.inserir(20);
         fila.inserir(30);
 
-        assertEquals(10, fila.peek(), "peek() deve retornar o primeiro elemento inserido (10)");
-        assertEquals(10, fila.retirar(), "retirar() após o peek() também deve retornar 10, sem alterar a ordem");
+        assertEquals(10, fila.peek());
+        assertEquals(10, fila.retirar());
     }
 
     @Test
@@ -63,6 +63,6 @@ public class FilaListaTest {
 
         fila.liberar();
 
-        assertTrue(fila.estaVazia(), "Após invocar liberar(), a fila deve estar vazia");
+        assertTrue(fila.estaVazia());
     }
 }
