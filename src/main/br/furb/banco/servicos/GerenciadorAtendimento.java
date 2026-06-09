@@ -119,9 +119,11 @@ public class GerenciadorAtendimento {
         if (clienteEscolhido != null) {
             RegistroAtendimento registro = new RegistroAtendimento(clienteEscolhido, horarioAtual);
             guiche.registrarAtendimento(registro);
+            System.out.println("Guichế " + guiche.getId() + " chamou " + registro.getCliente().toString());
             return registro;
         }
         // Último caso possível: ambas as filas estavam vazias
+        System.out.println("Fila vazia");
         return null;
     }
 
