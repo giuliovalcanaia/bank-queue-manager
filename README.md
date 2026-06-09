@@ -25,7 +25,6 @@ classDiagram
         -horarioInicioAtendimento: LocalTime
         -tempoAtendimento: int
         +toString() String
-        -simularTempoAtendimento() int
     }
 
     class Guiche {
@@ -33,6 +32,7 @@ classDiagram
         -tipoAtendimento: TipoAtendimento
         -historicoAtendimentos: PilhaLista~RegistroAtendimento~
         -ultimoFoiPrioridade: boolean
+        +registrarAtendimento() void
         +toString() String
     }
 
