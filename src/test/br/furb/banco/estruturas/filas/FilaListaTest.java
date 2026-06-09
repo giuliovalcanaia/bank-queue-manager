@@ -17,13 +17,13 @@ public class FilaListaTest {
 
     @Test
     @DisplayName("Caso 1: Conferir se o método estaVazia reconhece fila vazia")
-    void testeEstaVaziaReconheceFilaVazia() {
+    void validaEstaVaziaReconheceFilaVazia() {
         assertTrue(fila.estaVazia());
     }
 
     @Test
     @DisplayName("Caso 2: Conferir se o método estaVazia reconhece fila não vazia")
-    void testeEstaVaziaReconheceFilaNaoVazia() {
+    void validaEstaVaziaReconheceFilaNaoVazia() {
         fila.inserir(10);
 
         assertFalse(fila.estaVazia());
@@ -31,7 +31,7 @@ public class FilaListaTest {
 
     @Test
     @DisplayName("Caso 3: Conferir se os dados são enfileirados e desenfileirados corretamente")
-    void testeEnfileirarEDesenfileirarCorretamente() {
+    void validaEnfileirarEDesenfileirarCorretamente() {
         fila.inserir(10);
         fila.inserir(20);
         fila.inserir(30);
@@ -45,7 +45,7 @@ public class FilaListaTest {
 
     @Test
     @DisplayName("Caso 4: Conferir se o método peek() retorna o início da fila")
-    void testePeekRetornaInicioDaFila() {
+    void validaPeekRetornaInicioDaFila() {
         fila.inserir(10);
         fila.inserir(20);
         fila.inserir(30);
@@ -56,7 +56,7 @@ public class FilaListaTest {
 
     @Test
     @DisplayName("Caso 5: Conferir se o método liberar() remove os elementos da fila")
-    void testeLiberarRemoveElementosDaFila() {
+    void validaLiberarRemoveElementosDaFila() {
         fila.inserir(10);
         fila.inserir(20);
         fila.inserir(30);
