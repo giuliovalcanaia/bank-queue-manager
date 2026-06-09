@@ -85,7 +85,7 @@ public class Relatorio {
         System.out.println("Total Geral de Atendimentos: " + totalGeralAtendimentos);
 
         if (totalGeralAtendimentos > 0) {
-            System.out.println("Tempo Médio de Espera Total: " + (tempoEsperaTotalGeral / totalGeralAtendimentos) + " min");
+            System.out.println("Tempo Médio de Espera Total: " + ((double) tempoEsperaTotalGeral / totalGeralAtendimentos) + " min");
         } else {
             System.out.println("Tempo Médio de Espera Total: 0 min");
         }
