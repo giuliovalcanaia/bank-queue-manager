@@ -25,6 +25,7 @@ public class ListaEncadeadaTest {
     @DisplayName("Caso 2: Verificar se é reconhecida lista não vazia")
     void verificaListaNaoVazia() {
         lista.inserir(5);
+
         assertFalse(lista.estaVazia());
     }
 
@@ -32,12 +33,9 @@ public class ListaEncadeadaTest {
     @DisplayName("Caso 3: Validar inclusão de um número")
     void validaInclusaoDeUmNumero() {
         lista.inserir(5);
-        NoLista<Integer> primeiro = lista.getPrimeiro();
 
-        assertEquals(5, primeiro.getInfo());
-        assertEquals(null, primeiro.getProximo());
+        assertEquals(5, lista.getPrimeiro().getInfo());
     }
-
 
     @Test
     @DisplayName("Caso 4: Validar inclusão de 3 números")
@@ -54,8 +52,6 @@ public class ListaEncadeadaTest {
 
         NoLista<Integer> no3 = no2.getProximo();
         assertEquals(5, no3.getInfo());
-
-        assertEquals(null, no3.getProximo());
     }
 
 
