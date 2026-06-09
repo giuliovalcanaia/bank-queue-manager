@@ -4,7 +4,7 @@ import br.furb.banco.estruturas.filas.FilaLista;
 import br.furb.banco.modelos.Cliente;
 import br.furb.banco.modelos.Guiche;
 import br.furb.banco.modelos.RegistroAtendimento;
-import br.furb.banco.modelos.TipoGuiche;
+import br.furb.banco.modelos.TipoAtendimento;
 
 import java.time.LocalTime;
 
@@ -18,7 +18,7 @@ public class GerenciadorAtendimento {
     private Guiche[] guiches;
 
     /**
-     * Construtor do Gerenciador. Inicializa as filas e os 3 guichês obrigatórios.
+     * Construtor do Gerenciador. Inicializa as filas e os guichês.
      * @param qtdGuicheNormal quantidade de guichês para atendimento normal
      * @param qtdGuichePrioridade quantidade de guichês para atendimento prioritário
      */
@@ -31,13 +31,13 @@ public class GerenciadorAtendimento {
         int idContador = 1;
 
         for (int i = 0; i < qtdGuicheNormal; i++) {
-            this.guiches[indexArray] = new Guiche(idContador, TipoGuiche.GERAL);
+            this.guiches[indexArray] = new Guiche(idContador, TipoAtendimento.GERAL);
             indexArray++;
             idContador++;
         }
 
         for (int i = 0; i < qtdGuichePrioridade; i++) {
-            this.guiches[indexArray] = new Guiche(idContador, TipoGuiche.PREFERENCIAL);
+            this.guiches[indexArray] = new Guiche(idContador, TipoAtendimento.PREFERENCIAL);
             indexArray++;
             idContador++;
         }
@@ -52,7 +52,7 @@ public class GerenciadorAtendimento {
             return;
         }
 
-        if (cliente.isPrioritario()) {
+        if (cliente.getTipoAtendimento() == TipoAtendimento.PREFERENCIAL) {
             filaPrioridade.inserir(cliente);
         } else {
             filaNormal.inserir(cliente);
@@ -74,9 +74,9 @@ public class GerenciadorAtendimento {
 
         Cliente clienteEscolhido = null;
 
-        // GUICHÊ PREFERENCIAL: atende EXCLUSIVAMENTE a FilaPrioridade
+        // GUICHÊ PREFERENCIAL: atende EXCULSIVAMENTE a FilaPrioridade
         // Ignora a flag último foi prioridade
-        if (guiche.getTipo() == TipoGuiche.PREFERENCIAL) {
+        if (guiche.getTipoAtendimento() == TipoAtendimento.PREFERENCIAL) {
             // Se a fila prioridade não está vazia, chama o próximo prioritário
             if (!filaPrioridade.estaVazia()) {
                 clienteEscolhido = filaPrioridade.retirar();
@@ -87,7 +87,7 @@ public class GerenciadorAtendimento {
         }
 
         // GUICHÊ GERAL: seguem a lógica de alternância equilibrada
-        else if (guiche.getTipo() == TipoGuiche.GERAL) {
+        else if (guiche.getTipoAtendimento() == TipoAtendimento.GERAL) {
             // Se o último cliente atendido NESTE guichê foi prioritário, tenta equilibrar chamando a FilaNormal
             // Se o último foi prioridade
             if (guiche.isUltimoFoiPrioridade()) {
