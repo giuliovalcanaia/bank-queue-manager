@@ -12,7 +12,6 @@ public class OrdenacaoTest {
 
     @BeforeEach
     void setUp() {
-        // Inicializa o vetor de entrada e o vetor com o resultado esperado antes de cada teste
         vetorEntrada = new Integer[]{70, 2, 88, 15, 90, 30};
         vetorEsperado = new Integer[]{2, 15, 30, 70, 88, 90};
     }
@@ -25,7 +24,7 @@ public class OrdenacaoTest {
 
         ordenacao.ordenar();
 
-        assertArrayEquals(vetorEsperado, ordenacao.getInfo(), "O vetor deve estar ordenado crescentemente: [2, 15, 30, 70, 88, 90]");
+        assertArrayEquals(vetorEsperado, ordenacao.getInfo());
     }
 
     @Test
@@ -36,7 +35,7 @@ public class OrdenacaoTest {
 
         ordenacao.ordenar();
 
-        assertArrayEquals(vetorEsperado, ordenacao.getInfo(), "O vetor deve estar ordenado crescentemente: [2, 15, 30, 70, 88, 90]");
+        assertArrayEquals(vetorEsperado, ordenacao.getInfo());
     }
 
     @Test
@@ -47,7 +46,7 @@ public class OrdenacaoTest {
 
         ordenacao.ordenar();
 
-        assertArrayEquals(vetorEsperado, ordenacao.getInfo(), "O vetor deve estar ordenado crescentemente: [2, 15, 30, 70, 88, 90]");
+        assertArrayEquals(vetorEsperado, ordenacao.getInfo());
     }
 
     @Test
@@ -58,6 +57,6 @@ public class OrdenacaoTest {
 
         ordenacao.ordenar();
 
-        assertArrayEquals(vetorEsperado, ordenacao.getInfo(), "O vetor deve estar ordenado crescentemente: [2, 15, 30, 70, 88, 90]");
+        assertArrayEquals(vetorEsperado, ordenacao.getInfo());
     }
 }
