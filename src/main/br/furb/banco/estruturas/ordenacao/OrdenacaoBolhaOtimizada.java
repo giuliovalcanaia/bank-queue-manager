@@ -6,26 +6,20 @@ public class OrdenacaoBolhaOtimizada<T extends Comparable<T>> extends OrdenacaoA
     public void ordenar() {
         T[] info = getInfo();
 
-        if (info == null) {
-            return;
-        }
-
         int n = info.length;
-        boolean trocou; // Variável para rastrear se houve alguma troca na iteração
+        boolean trocou;
 
         for (int i = 0; i < n - 1; i++) {
-            trocou = false; // Reseta a flag no início de cada nova varredura
+            trocou = false;
 
             for (int j = 0; j < n - 1 - i; j++) {
 
                 if (info[j].compareTo(info[j + 1]) > 0) {
                     trocar(j, j + 1);
-                    trocou = true; // Marca que pelo menos uma troca aconteceu
+                    trocou = true;
                 }
             }
 
-            // Se o laço interno rodou inteiro e não fez nenhuma troca, o vetor já está ordenado.
-            // O comando 'break' interrompe o laço externo precocemente.
             if (!trocou) {
                 break;
             }
