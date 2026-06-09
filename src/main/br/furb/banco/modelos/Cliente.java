@@ -8,18 +8,18 @@ import java.time.LocalTime;
 public class Cliente {
 
     private int id;
-    private boolean prioritario;
+    private TipoAtendimento tipoAtendimento;
     private LocalTime horarioChegada;
 
     /**
      * Construtor da classe Cliente.
      * * @param id             Identificador único do cliente.
-     * @param prioritario    Define se o cliente é da fila de prioridade (true) ou normal (false).
+     * @param tipoAtendimento Define se o cliente é da fila de prioridade.
      * @param horarioChegada Horário em que o cliente entrou na fila.
      */
-    public Cliente(int id, boolean prioritario, LocalTime horarioChegada) {
+    public Cliente(int id, TipoAtendimento tipoAtendimento, LocalTime horarioChegada) {
         this.id = id;
-        this.prioritario = prioritario;
+        this.tipoAtendimento = tipoAtendimento;
         this.horarioChegada = horarioChegada;
     }
 
@@ -29,8 +29,8 @@ public class Cliente {
         return id;
     }
 
-    public boolean isPrioritario() {
-        return prioritario;
+    public TipoAtendimento getTipoAtendimento() {
+        return tipoAtendimento;
     }
 
     public LocalTime getHorarioChegada() {
@@ -43,8 +43,8 @@ public class Cliente {
         this.id = id;
     }
 
-    public void setPrioritario(boolean prioritario) {
-        this.prioritario = prioritario;
+    public void setTipoAtendimento(TipoAtendimento tipoAtendimento) {
+        this.tipoAtendimento = tipoAtendimento;
     }
 
     public void setHorarioChegada(LocalTime horarioChegada) {
@@ -53,15 +53,10 @@ public class Cliente {
 
     @Override
     public String toString() {
-        String tipo = "Normal";
-        if (prioritario) {
-            tipo = "Prioritário";
-        }
-
         return "Cliente { " +
-                "ID = " + id +
-                ", Tipo = " + tipo +
-                ", Chegada = " + horarioChegada +
+                "ID = " + getId() +
+                ", Tipo = " + getTipoAtendimento().getDescricao() +
+                ", Chegada = " + getHorarioChegada() +
                 " }";
     }
 }

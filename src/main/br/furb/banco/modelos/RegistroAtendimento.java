@@ -11,6 +11,7 @@ public class RegistroAtendimento {
 
     private Cliente cliente;
     private LocalTime horarioInicioAtendimento;
+    private LocalTime horarioFimAtendimento;
     private int tempoAtendimento; // Tempo em minutos
 
     /**
@@ -21,6 +22,7 @@ public class RegistroAtendimento {
     public RegistroAtendimento(Cliente cliente, LocalTime horarioInicioAtendimento) {
         this.cliente = cliente;
         this.horarioInicioAtendimento = horarioInicioAtendimento;
+        // Recebe um valor aleatório para efeitos de simulação
         this.tempoAtendimento = simularTempoAtendimento();
     }
 
@@ -62,19 +64,11 @@ public class RegistroAtendimento {
         return tempoAtendimento;
     }
 
-    // Converter prioridade
-    public  String getPrioridade() {
-        if (cliente.isPrioritario()) {
-            return "Prioritário";
-        }
-        return "Não prioritário";
-    }
-
     @Override
     public String toString() {
         return "Registro de atendimento {" +
                 " ClienteID = " + cliente.getId() +
-                ", Tipo = " + getPrioridade() +
+                ", Tipo = " + cliente.getTipoAtendimento().getDescricao() +
                 ", Chegada = " + cliente.getHorarioChegada() +
                 ", Início = " + horarioInicioAtendimento +
                 ", Tempo Atendimento = " + tempoAtendimento + " min" +

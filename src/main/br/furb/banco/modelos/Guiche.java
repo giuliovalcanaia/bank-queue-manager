@@ -8,18 +8,18 @@ import br.furb.banco.estruturas.pilhas.*;
 public class Guiche {
 
     private int id;
-    private TipoGuiche tipo;
+    private TipoAtendimento tipoAtendimento;
     private PilhaLista<RegistroAtendimento> historicoAtendimentos;
     private boolean ultimoFoiPrioridade;
 
     /**
      * Construtor do Guichê.
      * * @param id   Identificador do guichê (ex: 1, 2, 3)
-     * @param tipo Tipo do guichê (ex: TipoGuiche.PREFERENCIAL, TipoGuiche.GERAL)
+     * @param tipo Tipo do guichê (ex: TipoAtendimento.PREFERENCIAL, TipoAtendimento.GERAL)
      */
-    public Guiche(int id, TipoGuiche tipo) {
+    public Guiche(int id, TipoAtendimento tipo) {
         this.id = id;
-        this.tipo = tipo;
+        this.tipoAtendimento = tipo;
         this.historicoAtendimentos = new PilhaLista<>();
         this.ultimoFoiPrioridade = false;
     }
@@ -33,7 +33,11 @@ public class Guiche {
         this.historicoAtendimentos.push(registro);
 
         // Atualiza a flag de prioridade
-        this.ultimoFoiPrioridade = registro.getCliente().isPrioritario();
+        if (registro.getCliente().getTipoAtendimento() == TipoAtendimento.GERAL) {
+            this.ultimoFoiPrioridade = false;
+        } else if (registro.getCliente().getTipoAtendimento() == TipoAtendimento.PREFERENCIAL) {
+            this.ultimoFoiPrioridade = true;
+        }
     }
 
     // Getters
@@ -42,8 +46,8 @@ public class Guiche {
         return id;
     }
 
-    public TipoGuiche getTipo() {
-        return tipo;
+    public TipoAtendimento getTipoAtendimento() {
+        return tipoAtendimento;
     }
 
     public PilhaLista<RegistroAtendimento> getHistoricoAtendimentos() {
@@ -58,7 +62,7 @@ public class Guiche {
     public String toString() {
         return "Guiche { " +
                 "ID = " + id +
-                ", Tipo = " + tipo +
+                ", Tipo = " + tipoAtendimento.getDescricao() +
                 ", Histórico (Tamanho) = " + historicoAtendimentos.tamanho() + // Assumindo que sua pilha tem esse método
                 " }";
     }
