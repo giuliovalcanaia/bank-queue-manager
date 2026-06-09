@@ -20,7 +20,9 @@ public class Relatorio {
     public void imprimirRelatorio(GerenciadorAtendimento gerenciador) {
         Guiche[] guiches = gerenciador.getGuiches();
 
+        System.out.println("---------------------------------------------------------");
         System.out.println("Relatório de atendimentos");
+        System.out.println("---------------------------------------------------------");
 
         int totalGeralAtendimentos = 0;
         int totalGeralNormal = 0;
@@ -74,7 +76,7 @@ public class Relatorio {
 
             System.out.println("Guichê " + guiche.getId() + " (" + guiche.getTipoAtendimento().getDescricao() + "):");
             System.out.println("  - Total de atendimentos: " + totalGuiche);
-            System.out.println("  - Normais: " + normalGuiche + " | Prioritários: " + prioritarioGuiche);
+            System.out.println("  - Geral: " + normalGuiche + " | Prioritários: " + prioritarioGuiche);
             System.out.println("-------------------------------------------------");
         }
 
