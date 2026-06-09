@@ -63,7 +63,7 @@ public class Guiche {
         return "Guiche { " +
                 "ID = " + id +
                 ", Tipo = " + tipoAtendimento.getDescricao() +
-                ", Histórico (Tamanho) = " + historicoAtendimentos.tamanho() + // Assumindo que sua pilha tem esse método
+                ", Histórico (Tamanho) = " + historicoAtendimentos.tamanho() +
                 " }";
     }
 }
