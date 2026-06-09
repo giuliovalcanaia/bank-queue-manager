@@ -24,6 +24,7 @@ classDiagram
         -cliente: Cliente
         -horarioInicioAtendimento: LocalTime
         -tempoAtendimento: int
+        +getTempEsperaMinutos() long
         +toString() String
     }
 
@@ -31,8 +32,7 @@ classDiagram
         -id: int
         -tipoAtendimento: TipoAtendimento
         -historicoAtendimentos: PilhaLista~RegistroAtendimento~
-        -ultimoFoiPrioridade: boolean
-        +registrarAtendimento() void
+        +registrarAtendimento(registro: RegistroAtendimento) void
         +toString() String
     }
 
@@ -54,6 +54,7 @@ classDiagram
         -filaPrioridade: FilaLista~Cliente~
         -filaNormal: FilaLista~Cliente~
         -guiches: Guiche[]
+        -consecutivosPrioritariosGerais: int
         +adicionarCliente(cliente: Cliente) void
         +chamarProximo(idGuiche: int, horarioAtual: LocalTime) RegistroAtendimento
         -encontrarGuichePorId(id: int) Guiche
@@ -71,9 +72,11 @@ classDiagram
     RegistroPorHorario   ..|>  Comparable
 
     %% Modelos
+    %% *-- = composição, ou seja, as classes só fazem sentido juntas
+    
     RegistroAtendimento  "1"  *--  "1"  Cliente
     Guiche               "1"  *--  "1"  TipoAtendimento
-    Guiche               "1"  *--  "1"  PilhaLista~T~
+    Guiche               "1"  *--  "1"  PilhaLista~RegistroAtendimento~
     Cliente              "1"  *--  "1"  TipoAtendimento
 
     %% Utils
@@ -82,7 +85,7 @@ classDiagram
 
     %% Serviços
     GerenciadorAtendimento  "1"  *--  "1..*"  Guiche
-    GerenciadorAtendimento  "1"  *--  "1"     FilaLista~T~
+    GerenciadorAtendimento  "1"  *--  "1"     FilaLista~Cliente~
     Relatorio-->              GerenciadorAtendimento
     Relatorio-->              OrdenacaoQuickSort~T~
     Relatorio-->              RegistroPorTempo
@@ -128,11 +131,12 @@ classDiagram
     class ListaEncadeada~T~ {
         -primeiro: NoLista~T~
         -ultimo: NoLista~T~
+        +ListaEncadeada()
         +getPrimeiro() NoLista~T~
         +getUltimo() NoLista~T~
         +inserir(valor: T) void
         +inserirNoFinal(valor: T) void
-        +estaVazia() boolean
+        +estaVazia() Boolean
         +buscar(valor: T) NoLista~T~
         +retirar(valor: T) void
         +obterComprimento() int
@@ -142,6 +146,7 @@ classDiagram
 
     class PilhaLista~T~ {
         -lista: ListaEncadeada~T~
+        +PilhaLista()
         +push(info: T) void
         +pop() T
         +peek() T
@@ -196,24 +201,24 @@ classDiagram
 
     %% MODELOS
 
-    class TipoGuiche {
+    class TipoAtendimento {
         <<enumeration>>
         PREFERENCIAL
         GERAL
         -descricao: String
         +getDescricao() String
-        +toString() String
     }
 
     class Cliente {
         -id: int
-        -prioritario: boolean
+        -tipoAtendimento: TipoAtendimento
         -horarioChegada: LocalTime
+        +Cliente(id: int, tipoAtendimento: TipoAtendimento, horarioChegada: LocalTime)
         +getId() int
-        +isPrioritario() boolean
+        +getTipoAtendimento() TipoAtendimento
         +getHorarioChegada() LocalTime
         +setId(id: int) void
-        +setPrioritario(prioritario: boolean) void
+        +setTipoAtendimento(tipoAtendimento: TipoAtendimento) void
         +setHorarioChegada(horarioChegada: LocalTime) void
         +toString() String
     }
@@ -222,27 +227,23 @@ classDiagram
         -cliente: Cliente
         -horarioInicioAtendimento: LocalTime
         -tempoAtendimento: int
+        +RegistroAtendimento(cliente: Cliente, horarioInicioAtendimento: LocalTime, tempoAtendimento: int)
         +getTempoEsperaMinutos() long
         +getCliente() Cliente
         +getHorarioInicioAtendimento() LocalTime
         +getTempoAtendimento() int
-        +getIdCliente() int
-        +getHorarioEntradaFila() LocalTime
-        +getPrioridade() String
         +toString() String
-        -simularTempoAtendimento() int
     }
 
     class Guiche {
         -id: int
-        -tipo: TipoGuiche
+        -tipoAtendimento: TipoAtendimento
         -historicoAtendimentos: PilhaLista~RegistroAtendimento~
-        -ultimoFoiPrioridade: boolean
+        +Guiche(id: int, tipo: TipoAtendimento)
         +registrarAtendimento(registro: RegistroAtendimento) void
         +getId() int
-        +getTipo() TipoGuiche
+        +getTipoAtendimento() TipoAtendimento
         +getHistoricoAtendimentos() PilhaLista~RegistroAtendimento~
-        +isUltimoFoiPrioridade() boolean
         +toString() String
     }
 
@@ -250,13 +251,15 @@ classDiagram
 
     class RegistroPorTempo {
         -registro: RegistroAtendimento
+        +RegistroPorTempo(registro: RegistroAtendimento)
         +getRegistro() RegistroAtendimento
         +setRegistro(registro: RegistroAtendimento) void
         +compareTo(outro: RegistroPorTempo) int
     }
 
     class RegistroPorHorario {
-        +registro: RegistroAtendimento
+        -registro: RegistroAtendimento
+        +RegistroPorHorario(registro: RegistroAtendimento)
         +getRegistro() RegistroAtendimento
         +setRegistro(registro: RegistroAtendimento) void
         +compareTo(outro: RegistroPorHorario) int
@@ -266,18 +269,19 @@ classDiagram
 
     class GerenciadorAtendimento {
         -filaPrioridade: FilaLista~Cliente~
-        -filaNormal: FilaLista~Cliente~
+        -filaGeral: FilaLista~Cliente~
         -guiches: Guiche[]
+        -consecutivosPrioritariosGerais: int
         +GerenciadorAtendimento(qtdGuicheNormal: int, qtdGuichePrioridade: int)
         +adicionarCliente(cliente: Cliente) void
         +chamarProximo(idGuiche: int, horarioAtual: LocalTime) RegistroAtendimento
         -encontrarGuichePorId(id: int) Guiche
         +getGuiches() Guiche[]
         +getFilaPrioridade() FilaLista~Cliente~
-        +getFilaNormal() FilaLista~Cliente~
+        +getFilaGeral() FilaLista~Cliente~
     }
 
-    class RelatorioService {
+    class Relatorio {
         +imprimirRelatorio(gerenciador: GerenciadorAtendimento) void
         -imprimirOrdenacoes(registros: RegistroAtendimento[]) void
     }
@@ -308,8 +312,9 @@ classDiagram
 
     %% Modelos
     RegistroAtendimento  "1"  *--  "1"  Cliente
-    Guiche               "1"  *--  "1"  TipoGuiche
-    Guiche               "1"  *--  "1"  PilhaLista~T~
+    Guiche               "1"  *--  "1"  TipoAtendimento
+    Guiche               "1"  *--  "1"  PilhaLista~RegistroAtendimento~
+    Cliente              "1"  *--  "1"  TipoAtendimento
 
     %% Utils
     RegistroPorTempo     "1"  *--  "1"  RegistroAtendimento
@@ -317,9 +322,9 @@ classDiagram
 
     %% Serviços
     GerenciadorAtendimento  "1"  *--  "1..*"  Guiche
-    GerenciadorAtendimento  "1"  *--  "1"     FilaLista~T~
-    RelatorioService         -->              GerenciadorAtendimento
-    RelatorioService         -->              OrdenacaoQuickSort~T~
-    RelatorioService         -->              RegistroPorTempo
-    RelatorioService         -->              RegistroPorHorario
+    GerenciadorAtendimento  "1"  *--  "2"     FilaLista~Cliente~
+    Relatorio                -->              GerenciadorAtendimento
+    Relatorio                -->              OrdenacaoQuickSort~T~
+    Relatorio                -->              RegistroPorTempo
+    Relatorio                -->              RegistroPorHorario
 ```
