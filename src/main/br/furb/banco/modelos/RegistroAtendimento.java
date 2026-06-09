@@ -2,7 +2,6 @@ package br.furb.banco.modelos;
 
 import java.time.Duration;
 import java.time.LocalTime;
-import java.util.Random;
 
 /**
  * Classe responsável por armazenar os dados do atendimento de um cliente em um guichê.
@@ -11,29 +10,17 @@ public class RegistroAtendimento {
 
     private Cliente cliente;
     private LocalTime horarioInicioAtendimento;
-    private LocalTime horarioFimAtendimento;
-    private int tempoAtendimento; // Tempo em minutos
+    private int tempoAtendimento;
 
     /**
      * Construtor da classe RegistroAtendimento.
      * @param cliente Objeto cliente que está sendo atendido (contém ID e horário de entrada).
      * @param horarioInicioAtendimento Horário em que o cliente foi chamado no guichê.
      */
-    public RegistroAtendimento(Cliente cliente, LocalTime horarioInicioAtendimento) {
+    public RegistroAtendimento(Cliente cliente, LocalTime horarioInicioAtendimento, int tempoAtendimento) {
         this.cliente = cliente;
         this.horarioInicioAtendimento = horarioInicioAtendimento;
-        // Recebe um valor aleatório para efeitos de simulação
-        this.tempoAtendimento = simularTempoAtendimento();
-    }
-
-    /**
-     * Gera um valor aleatório entre 2 e 30 para o tempo de atendimento.
-     * @return Tempo em minutos.
-     */
-    private int simularTempoAtendimento() {
-        Random random = new Random();
-        // random.nextInt(29) gera um número de 0 a 28. Somando 2, temos o intervalo de 2 a 30.
-        return random.nextInt(29) + 2;
+        this.tempoAtendimento = tempoAtendimento;
     }
 
     /**
