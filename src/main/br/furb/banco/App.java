@@ -11,12 +11,11 @@ public class App {
     public static void main(String[] args) {
         System.out.println("Iniciando simulação do posto de atendimento...");
 
-        // 1. Inicializa o gerenciador e criar os guichês
         GerenciadorAtendimento gerenciador = new GerenciadorAtendimento(2, 1);
 
         // ORDEM CRONOLÓGICA DOS EVENTOS
-        // 2. Criação e chegada de objetos clientes
-        // 3. Simultaneamente, faz a simulação de atendimento pelos guichês
+        // Criação e chegada de objetos clientes
+        // Simultaneamente, faz a simulação de atendimento pelos guichês
         gerenciador.adicionarCliente(new Cliente(1, false, LocalTime.of(10, 0)));
         gerenciador.adicionarCliente(new Cliente(2, true, LocalTime.of(10, 5)));
         gerenciador.adicionarCliente(new Cliente(3, false, LocalTime.of(10, 10)));
@@ -38,8 +37,7 @@ public class App {
 
 
 
-        // 4. Geração do Relatório Final
-        // Exibirá as métricas de tempo, uso de pilhas/filas e aplicará o QuickSort nas duas ordens exigidas
+        // Geração do Relatório Final
         RelatorioService relatorioService = new RelatorioService();
         relatorioService.imprimirRelatorio(gerenciador);
 
