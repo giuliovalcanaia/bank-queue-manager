@@ -10,99 +10,91 @@ public class ListaEncadeadaTest {
     private ListaEncadeada<Integer> lista;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
+        // Inicializa uma nova lista antes de cada tsete
         lista = new ListaEncadeada<>();
     }
 
     @Test
     @DisplayName("Caso 1: Verificar se é reconhecida lista vazia")
-    public void testCaso01ListaVazia() {
-        assertTrue(lista.estaVazia(), "A lista recém-construída deve estar vazia.");
+    void verificaSeReconheceVazia() {
+        assertTrue(lista.estaVazia());
     }
 
     @Test
     @DisplayName("Caso 2: Verificar se é reconhecida lista não vazia")
-    public void testCaso02ListaNaoVazia() {
+    void verificaListaNaoVazia() {
         lista.inserir(5);
-        assertFalse(lista.estaVazia(), "A lista não deve estar vazia após adicionar um elemento.");
+        assertFalse(lista.estaVazia());
     }
 
     @Test
     @DisplayName("Caso 3: Validar inclusão de um número")
-    public void testCaso03InclusaoDeUmNumero() {
+    void validaInclusaoDeUmNumero() {
         lista.inserir(5);
         NoLista<Integer> primeiro = lista.getPrimeiro();
 
-        assertNotNull(primeiro, "Deve retornar um nó válido.");
-        assertEquals(5, primeiro.getInfo(), "O nó deve conter o valor 5.");
-        assertNull(primeiro.getProximo(), "Não deve haver mais nós na lista.");
+        assertEquals(5, primeiro.getInfo());
+        assertEquals(null, primeiro.getProximo());
     }
 
 
     @Test
     @DisplayName("Caso 4: Validar inclusão de 3 números")
-    public void testCaso04InclusaoDeTresNumeros() {
+    void validaInclusaoDeTresNumeros() {
         lista.inserir(5);
         lista.inserir(10);
         lista.inserir(15);
 
         NoLista<Integer> no1 = lista.getPrimeiro();
-        assertNotNull(no1);
-        assertEquals(15, no1.getInfo(), "O primeiro valor deve ser 15.");
+        assertEquals(15, no1.getInfo());
 
         NoLista<Integer> no2 = no1.getProximo();
-        assertNotNull(no2);
-        assertEquals(10, no2.getInfo(), "O segundo valor deve ser 10.");
+        assertEquals(10, no2.getInfo());
 
         NoLista<Integer> no3 = no2.getProximo();
-        assertNotNull(no3);
-        assertEquals(5, no3.getInfo(), "O terceiro valor deve ser 5.");
+        assertEquals(5, no3.getInfo());
 
-        assertNull(no3.getProximo(), "Deve haver apenas 3 nós.");
+        assertEquals(null, no3.getProximo());
     }
 
 
     @Test
     @DisplayName("Caso 5: Validar busca de dados na lista na primeira posição")
-    public void testCaso05BuscarNaPrimeiraPosicao() {
+    void validarBuscarNaPrimeiraPosicao() {
         lista.inserir(5);
         lista.inserir(10);
         lista.inserir(15);
         lista.inserir(20);
 
-        NoLista<Integer> no = lista.buscar(20);
-        assertNotNull(no, "O nó com o valor 20 deve ser encontrado.");
-        assertEquals(20, no.getInfo());
+        assertEquals(20, lista.buscar(20).getInfo());
     }
 
     @Test
     @DisplayName("Caso 6: Validar busca de dados no meio da lista")
-    public void testCaso06BuscarNoMeioDaLista() {
+    void validaBuscarNoMeioDaLista() {
         lista.inserir(5);
         lista.inserir(10);
         lista.inserir(15);
         lista.inserir(20);
 
-        NoLista<Integer> no = lista.buscar(15);
-        assertNotNull(no, "O nó com o valor 15 deve ser encontrado.");
-        assertEquals(15, no.getInfo());
+        assertEquals(15, lista.buscar(15).getInfo());
     }
 
     @Test
     @DisplayName("Caso 7: Validar busca de dado inexistente")
-    public void testCaso07BuscarDadoInexistente() {
+    void validaBuscarDadoInexistente() {
         lista.inserir(5);
         lista.inserir(10);
         lista.inserir(15);
         lista.inserir(20);
 
-        NoLista<Integer> no = lista.buscar(50);
-        assertNull(no, "A busca por um dado inexistente deve retornar null.");
+        assertEquals(null, lista.buscar(50));
     }
 
     @Test
     @DisplayName("Caso 8: Validar exclusão de primeiro elemento da lista")
-    public void testCaso08ExclusaoPrimeiroElemento() {
+    void validaExclusaoPrimeiroElemento() {
         lista.inserir(5);
         lista.inserir(10);
         lista.inserir(15);
@@ -113,12 +105,13 @@ public class ListaEncadeadaTest {
         assertEquals(15, lista.getPrimeiro().getInfo());
         assertEquals(10, lista.getPrimeiro().getProximo().getInfo());
         assertEquals(5, lista.getPrimeiro().getProximo().getProximo().getInfo());
-        assertNull(lista.getPrimeiro().getProximo().getProximo().getProximo(), "A lista deve conter apenas 15, 10 e 5.");
+        // Deve encontrar nó vazio
+        assertEquals(null, lista.getPrimeiro().getProximo().getProximo().getProximo());
     }
 
     @Test
     @DisplayName("Caso 9: Validar exclusão de elemento do meio da lista")
-    public void testCaso09ExclusaoElementoMeio() {
+    void validaExclusaoElementoMeio() {
         lista.inserir(5);
         lista.inserir(10);
         lista.inserir(15);
@@ -129,62 +122,61 @@ public class ListaEncadeadaTest {
         assertEquals(20, lista.getPrimeiro().getInfo());
         assertEquals(10, lista.getPrimeiro().getProximo().getInfo());
         assertEquals(5, lista.getPrimeiro().getProximo().getProximo().getInfo());
-        assertNull(lista.getPrimeiro().getProximo().getProximo().getProximo(), "A lista deve conter apenas 20, 10 e 5.");
+        assertEquals(null, lista.getPrimeiro().getProximo().getProximo().getProximo());
     }
 
     @Test
-    @DisplayName("Caso 10: Validar que obterNo() retorna nó da posição 0")
-    public void testCaso10ObterNoPosicaoZero() {
+    @DisplayName("Caso 10: Validar que obterNo retorna nó da posição 0")
+    void validaObterNoPosicaoZero() {
         lista.inserir(5);
         lista.inserir(10);
         lista.inserir(15);
         lista.inserir(20);
 
         NoLista<Integer> no = lista.obterNo(0);
-        assertNotNull(no);
-        assertEquals(20, no.getInfo(), "O nó da posição 0 deve armazenar 20.");
+        assertEquals(20, lista.obterNo(0).getInfo());
     }
 
     @Test
-    @DisplayName("Caso 11: Validar que obterNo() retorna nó da última posição")
-    public void testCaso11ObterNoUltimaPosicao() {
+    @DisplayName("Caso 11: Validar que obterNo retorna nó da última posição")
+    void validaObterNoUltimaPosicao() {
         lista.inserir(5);
         lista.inserir(10);
         lista.inserir(15);
         lista.inserir(20);
 
         NoLista<Integer> no = lista.obterNo(3);
-        assertNotNull(no);
-        assertEquals(5, no.getInfo(), "O nó da posição 3 deve armazenar 5.");
+        assertEquals(5, lista.obterNo(3).getInfo());
     }
 
     @Test
-    @DisplayName("Caso 12: Validar que obterNo() recusa tentativa de ler posição inválida")
-    public void testCaso12ObterNoPosicaoInvalida() {
+    @DisplayName("Caso 12: Validar que obterNo recusa tentativa de ler posição inválida")
+    void validaObterNoPosicaoInvalida() {
         lista.inserir(5);
         lista.inserir(10);
         lista.inserir(15);
         lista.inserir(20);
 
+        // Expressão lambda
         assertThrows(IndexOutOfBoundsException.class, () -> {
             lista.obterNo(10);
-        }, "Acesso a posição inválida deve lançar IndexOutOfBoundsException.");
+        });
     }
 
     @Test
     @DisplayName("Caso 13: Validar método obterComprimento() para lista vazia")
-    public void testCaso13ObterComprimentoListaVazia() {
-        assertEquals(0, lista.obterComprimento(), "O comprimento de uma lista vazia deve ser 0.");
+    void validaObterComprimentoListaVazia() {
+        assertEquals(0, lista.obterComprimento());
     }
 
     @Test
     @DisplayName("Caso 14: Validar método obterComprimento() para lista não vazia")
-    public void testCaso14ObterComprimentoListaNaoVazia() {
+    void validaObterComprimentoListaNaoVazia() {
         lista.inserir(5);
         lista.inserir(10);
         lista.inserir(15);
         lista.inserir(20);
 
-        assertEquals(4, lista.obterComprimento(), "O comprimento da lista deve ser 4.");
+        assertEquals(4, lista.obterComprimento());
     }
 }
