@@ -102,21 +102,15 @@ public class Relatorio {
             System.out.println("Tempo Médio (Normais): 0 min");
         }
 
-        // 4. Executa as ordenações utilizando o QuickSort fornecido
+        // Executa as ordenações utilizando o QuickSort
         if (totalGeralAtendimentos > 0) {
             imprimirOrdenacoes(todosRegistros);
         }
     }
 
-    /**
-     * Imprime duas listas: a ordem de atendimentos por tempo de espera
-     * e por ordem cronológica
-     * @param registros O array RegistroAtendimento[] contendo os registros feitos
-     *                  ao longo do dia.
-     */
     private void imprimirOrdenacoes(RegistroAtendimento[] registros) {
 
-        // --- ORDENAÇÃO 1: POR TEMPO DE ESPERA ---
+        // Tempo de espera
         System.out.println("RELAÇÃO DE ATENDIMENTOS (Ordem Crescente de Tempo de Espera):");
 
         // Cria o array que será usado para ordenar
@@ -133,7 +127,7 @@ public class Relatorio {
             System.out.println(rt.getRegistro().toString());
         }
 
-        // --- ORDENAÇÃO 2: POR ORDEM CRONOLÓGICA ---
+        // Ordem cronológica
         System.out.println("RELAÇÃO DE ATENDIMENTOS (Ordem Cronológica - Horário Atendimento):");
 
         RegistroPorHorario[] arrayHorario = new RegistroPorHorario[registros.length];
@@ -146,7 +140,7 @@ public class Relatorio {
         quickHorario.ordenar();
 
         for (RegistroPorHorario rh : arrayHorario) {
-            System.out.println(rh.registro.toString());
+            System.out.println(rh.getRegistro().toString());
         }
     }
 
