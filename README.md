@@ -6,25 +6,17 @@ classDiagram
 
     %% MODELOS
 
-    class TipoGuiche {
+    class TipoAtendimento {
         <<enumeration>>
         PREFERENCIAL
         GERAL
-        -descricao: String
         +getDescricao() String
-        +toString() String
     }
 
     class Cliente {
         -id: int
-        -prioritario: boolean
+        -tipoAtendimento: TipoAtendimento 
         -horarioChegada: LocalTime
-        +getId() int
-        +isPrioritario() boolean
-        +getHorarioChegada() LocalTime
-        +setId(id: int) void
-        +setPrioritario(prioritario: boolean) void
-        +setHorarioChegada(horarioChegada: LocalTime) void
         +toString() String
     }
 
@@ -32,27 +24,15 @@ classDiagram
         -cliente: Cliente
         -horarioInicioAtendimento: LocalTime
         -tempoAtendimento: int
-        +getTempoEsperaMinutos() long
-        +getCliente() Cliente
-        +getHorarioInicioAtendimento() LocalTime
-        +getTempoAtendimento() int
-        +getIdCliente() int
-        +getHorarioEntradaFila() LocalTime
-        +getPrioridade() String
         +toString() String
         -simularTempoAtendimento() int
     }
 
     class Guiche {
         -id: int
-        -tipo: TipoGuiche
+        -tipoAtendimento: TipoAtendimento
         -historicoAtendimentos: PilhaLista~RegistroAtendimento~
         -ultimoFoiPrioridade: boolean
-        +registrarAtendimento(registro: RegistroAtendimento) void
-        +getId() int
-        +getTipo() TipoGuiche
-        +getHistoricoAtendimentos() PilhaLista~RegistroAtendimento~
-        +isUltimoFoiPrioridade() boolean
         +toString() String
     }
 
@@ -60,15 +40,11 @@ classDiagram
 
     class RegistroPorTempo {
         -registro: RegistroAtendimento
-        +getRegistro() RegistroAtendimento
-        +setRegistro(registro: RegistroAtendimento) void
         +compareTo(outro: RegistroPorTempo) int
     }
 
     class RegistroPorHorario {
         +registro: RegistroAtendimento
-        +getRegistro() RegistroAtendimento
-        +setRegistro(registro: RegistroAtendimento) void
         +compareTo(outro: RegistroPorHorario) int
     }
 
@@ -78,16 +54,12 @@ classDiagram
         -filaPrioridade: FilaLista~Cliente~
         -filaNormal: FilaLista~Cliente~
         -guiches: Guiche[]
-        +GerenciadorAtendimento(qtdGuicheNormal: int, qtdGuichePrioridade: int)
         +adicionarCliente(cliente: Cliente) void
         +chamarProximo(idGuiche: int, horarioAtual: LocalTime) RegistroAtendimento
         -encontrarGuichePorId(id: int) Guiche
-        +getGuiches() Guiche[]
-        +getFilaPrioridade() FilaLista~Cliente~
-        +getFilaNormal() FilaLista~Cliente~
     }
 
-    class RelatorioService {
+    class Relatorio {
         +imprimirRelatorio(gerenciador: GerenciadorAtendimento) void
         -imprimirOrdenacoes(registros: RegistroAtendimento[]) void
     }
@@ -100,8 +72,9 @@ classDiagram
 
     %% Modelos
     RegistroAtendimento  "1"  *--  "1"  Cliente
-    Guiche               "1"  *--  "1"  TipoGuiche
+    Guiche               "1"  *--  "1"  TipoAtendimento
     Guiche               "1"  *--  "1"  PilhaLista~T~
+    Cliente              "1"  *--  "1"  TipoAtendimento
 
     %% Utils
     RegistroPorTempo     "1"  *--  "1"  RegistroAtendimento
@@ -110,14 +83,14 @@ classDiagram
     %% Serviços
     GerenciadorAtendimento  "1"  *--  "1..*"  Guiche
     GerenciadorAtendimento  "1"  *--  "1"     FilaLista~T~
-    RelatorioService         -->              GerenciadorAtendimento
-    RelatorioService         -->              OrdenacaoQuickSort~T~
-    RelatorioService         -->              RegistroPorTempo
-    RelatorioService         -->              RegistroPorHorario
+    Relatorio-->              GerenciadorAtendimento
+    Relatorio-->              OrdenacaoQuickSort~T~
+    Relatorio-->              RegistroPorTempo
+    Relatorio-->              RegistroPorHorario
 ```
 
 ## Diagrama de classes completo
-Contém o diagrama de todas as classes, inclusive relativo às classes das estruturas de dados
+Contém o diagrama de todas as classes, inclusive relativo às classes das estruturas de dados.
 ```mermaid
 classDiagram
 
