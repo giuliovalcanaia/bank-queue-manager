@@ -10,7 +10,6 @@ public class Guiche {
     private int id;
     private TipoAtendimento tipoAtendimento;
     private PilhaLista<RegistroAtendimento> historicoAtendimentos;
-    private boolean ultimoFoiPrioridade;
 
     /**
      * Construtor do Guichê.
@@ -21,7 +20,6 @@ public class Guiche {
         this.id = id;
         this.tipoAtendimento = tipo;
         this.historicoAtendimentos = new PilhaLista<>();
-        this.ultimoFoiPrioridade = false;
     }
 
     /**
@@ -31,13 +29,6 @@ public class Guiche {
     public void registrarAtendimento(RegistroAtendimento registro) {
         // Empilha o registro na estrutura
         this.historicoAtendimentos.push(registro);
-
-        // Atualiza a flag de prioridade
-        if (registro.getCliente().getTipoAtendimento() == TipoAtendimento.GERAL) {
-            this.ultimoFoiPrioridade = false;
-        } else if (registro.getCliente().getTipoAtendimento() == TipoAtendimento.PREFERENCIAL) {
-            this.ultimoFoiPrioridade = true;
-        }
     }
 
     // Getters
@@ -52,10 +43,6 @@ public class Guiche {
 
     public PilhaLista<RegistroAtendimento> getHistoricoAtendimentos() {
         return historicoAtendimentos;
-    }
-
-    public boolean isUltimoFoiPrioridade() {
-        return ultimoFoiPrioridade;
     }
 
     @Override
