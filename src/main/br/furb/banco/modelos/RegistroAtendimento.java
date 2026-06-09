@@ -62,16 +62,7 @@ public class RegistroAtendimento {
         return tempoAtendimento;
     }
 
-    // Métodos de atalho
-
-    public int getIdCliente() {
-        return cliente.getId();
-    }
-
-    public LocalTime getHorarioEntradaFila() {
-        return cliente.getHorarioChegada();
-    }
-
+    // Converter prioridade
     public  String getPrioridade() {
         if (cliente.isPrioritario()) {
             return "Prioritário";
@@ -81,10 +72,10 @@ public class RegistroAtendimento {
 
     @Override
     public String toString() {
-        return "RegistroAtendimento {" +
-                " ClienteID = " + getIdCliente() +
+        return "Registro de atendimento {" +
+                " ClienteID = " + cliente.getId() +
                 ", Tipo = " + getPrioridade() +
-                ", Chegada = " + getHorarioEntradaFila() +
+                ", Chegada = " + cliente.getHorarioChegada() +
                 ", Início = " + horarioInicioAtendimento +
                 ", Tempo Atendimento = " + tempoAtendimento + " min" +
                 ", Tempo Espera = " + getTempoEsperaMinutos() + " min" +
