@@ -10,11 +10,13 @@ import java.time.LocalTime;
 public class App {
 
     public static void main(String[] args) {
+        System.out.println("----------------------------------------------");
         System.out.println("Iniciando simulação do posto de atendimento...");
+        System.out.println("----------------------------------------------");
 
         GerenciadorAtendimento gerenciador = new GerenciadorAtendimento(2, 1);
 
-        // ORDEM CRONOLÓGICA DOS EVENTOS
+        // Ordem cronológica dos evendos
         gerenciador.adicionarCliente(new Cliente(1, TipoAtendimento.GERAL, LocalTime.of(10, 0)));
         gerenciador.adicionarCliente(new Cliente(2, TipoAtendimento.PREFERENCIAL, LocalTime.of(10, 5)));
         gerenciador.adicionarCliente(new Cliente(3, TipoAtendimento.GERAL, LocalTime.of(10, 10)));
