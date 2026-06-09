@@ -1,6 +1,6 @@
 # Sistema gerenciador de fila de atendimento bancário 
 ## Diagrama de classes simplificado
-Contém as classes do projeto com excessão das classes de estruturas de dados
+Contém as classes do projeto com exceção das classes de estruturas de dados
 ```mermaid
 classDiagram
 
