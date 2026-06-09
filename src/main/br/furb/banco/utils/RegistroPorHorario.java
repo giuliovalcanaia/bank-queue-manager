@@ -4,12 +4,14 @@ import br.furb.banco.modelos.RegistroAtendimento;
 
 public class RegistroPorHorario implements Comparable<RegistroPorHorario> {
 
-    public RegistroAtendimento registro;
+    private RegistroAtendimento registro;
 
+    // Construtor
     public RegistroPorHorario(RegistroAtendimento registro) {
         this.registro = registro;
     }
 
+    // Getter and setter
     public RegistroAtendimento getRegistro() {
         return registro;
     }

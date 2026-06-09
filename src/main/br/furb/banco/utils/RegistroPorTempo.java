@@ -6,6 +6,7 @@ public class RegistroPorTempo implements Comparable<RegistroPorTempo> {
 
     private RegistroAtendimento registro;
 
+    // Construtor
     public RegistroPorTempo(RegistroAtendimento registro) {
         this.registro = registro;
     }
