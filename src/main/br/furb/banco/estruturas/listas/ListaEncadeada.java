@@ -44,7 +44,7 @@ public class ListaEncadeada<T> {
   public NoLista<T> buscar(T valor) {
     NoLista<T> ponteiro = this.primeiro;
     while (ponteiro != null) {
-      if (ponteiro.getInfo() == valor) {
+      if (ponteiro.getInfo().equals(valor)) {
         return ponteiro;
       }
       ponteiro = ponteiro.getProximo();
