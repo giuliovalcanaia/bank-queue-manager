@@ -10,6 +10,9 @@ public class Guiche {
     private int id;
     private TipoAtendimento tipoAtendimento;
     private PilhaLista<RegistroAtendimento> historicoAtendimentos;
+    private int qtdAtendimentosTotal;
+    private int qtdAtendimentosPrioritario;
+    private int qtdAtendimentosGeral;
 
     /**
      * Construtor do Guichê.
@@ -23,12 +26,21 @@ public class Guiche {
     }
 
     /**
-     * Registra o atendimento empilhando-o no histórico e atualizando a flag de alternância.
+     * Registra o atendimento empilhando-o no histórico e atualizando as métricas
      * * @param registro O registro do atendimento recém-finalizado.
      */
     public void registrarAtendimento(RegistroAtendimento registro) {
         // Empilha o registro na estrutura
         this.historicoAtendimentos.push(registro);
+
+        // Calcula as métricas
+        this.qtdAtendimentosTotal++;
+        if (registro.getTipoAtendimento() == TipoAtendimento.GERAL) {
+            this.qtdAtendimentosGeral++;
+        } else {
+            this.qtdAtendimentosPrioritario++;
+        }
+
     }
 
     // Getters
@@ -45,12 +57,27 @@ public class Guiche {
         return historicoAtendimentos;
     }
 
+    public int getQtdAtendimentosTotal() {
+        return qtdAtendimentosTotal;
+    }
+
+    public int getQtdAtendimentosPrioritario() {
+        return qtdAtendimentosPrioritario;
+    }
+
+    public int getQtdAtendimentosGeral() {
+        return qtdAtendimentosGeral;
+    }
+
     @Override
     public String toString() {
         return "Guiche { " +
                 "ID = " + id +
                 ", Tipo = " + tipoAtendimento.getDescricao() +
                 ", Histórico (Tamanho) = " + historicoAtendimentos.tamanho() +
+                ", Quantidade de atendimentos geral = " + this.qtdAtendimentosGeral +
+                ", Quantidade de atendimentos prioritário = " + this.qtdAtendimentosPrioritario +
+                ", Quantidade total de atendimentos = " + this.qtdAtendimentosTotal +
                 " }";
     }
 }
