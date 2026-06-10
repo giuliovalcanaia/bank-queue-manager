@@ -12,6 +12,7 @@ public class RegistroAtendimento {
     private LocalTime horarioInicioAtendimento;
     private LocalTime horarioTerminoAtendimento;
     private long tempoEspera;
+    private long tempoAtendimento;
     private TipoAtendimento tipoAtendimento;
     private Guiche guiche;
 
@@ -26,6 +27,7 @@ public class RegistroAtendimento {
         this.horarioInicioAtendimento = horarioInicioAtendimento;
         this.tempoEspera = calculaTempoEsperaMinutos();
         this.guiche = guiche;
+        this.tempoAtendimento = -1;
     }
 
     private long calculaTempoEsperaMinutos() {
@@ -33,7 +35,7 @@ public class RegistroAtendimento {
         return duracao.toMinutes();
     }
 
-    private long calculaTempoAtendimentoMinutos() {
+    public long calculaTempoAtendimentoMinutos() {
         Duration duracao = Duration.between(horarioInicioAtendimento, horarioTerminoAtendimento);
         return duracao.toMinutes();
     }
@@ -64,6 +66,10 @@ public class RegistroAtendimento {
 
     public void setHorarioTerminoAtendimento(LocalTime horarioTerminoAtendimento) {
         this.horarioTerminoAtendimento = horarioTerminoAtendimento;
+    }
+
+    public void setTempoAtendimento(long tempoAtendimento) {
+        this.tempoAtendimento = tempoAtendimento;
     }
 
     @Override
