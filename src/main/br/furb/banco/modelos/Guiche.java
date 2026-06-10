@@ -10,6 +10,7 @@ public class Guiche {
     private int id;
     private TipoAtendimento tipoAtendimento;
     private PilhaLista<RegistroAtendimento> historicoAtendimentos;
+    private boolean estavaAtendendo;
     private int qtdAtendimentosTotal;
     private int qtdAtendimentosPrioritario;
     private int qtdAtendimentosGeral;
@@ -23,6 +24,7 @@ public class Guiche {
         this.id = id;
         this.tipoAtendimento = tipo;
         this.historicoAtendimentos = new PilhaLista<>();
+        this.estavaAtendendo = false;
     }
 
     /**
@@ -67,6 +69,16 @@ public class Guiche {
 
     public int getQtdAtendimentosGeral() {
         return qtdAtendimentosGeral;
+    }
+
+    public boolean estavaAtendendo() {
+        return estavaAtendendo;
+    }
+
+    // Setters
+
+    public void setEstavaAtendendo(boolean estavaAtendendo) {
+        this.estavaAtendendo = estavaAtendendo;
     }
 
     @Override
