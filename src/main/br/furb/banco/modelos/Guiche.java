@@ -43,8 +43,6 @@ public class Guiche {
             // Média ponderada
             this.tempoEsperaMedioPrioritario = (this.tempoEsperaMedioPrioritario * this.qtdAtendimentosPrioritario + tempoEsperaDesteAtendimento) / (this.qtdAtendimentosPrioritario + 1);
         }
-        // Média total
-        this.tempoEsperaMedioTotal = (this.tempoEsperaMedioGeral + this.tempoEsperaMedioPrioritario) / 2;
 
         // Calcula as métricas quantitativas
         this.qtdAtendimentosTotal++;
@@ -53,6 +51,9 @@ public class Guiche {
         } else {
             this.qtdAtendimentosPrioritario++;
         }
+
+        // Média total
+        this.tempoEsperaMedioTotal = (this.tempoEsperaMedioGeral * qtdAtendimentosGeral + this.tempoEsperaMedioPrioritario * qtdAtendimentosPrioritario) / (qtdAtendimentosTotal);
 
         // Empilha o registro na estrutura
         this.historicoAtendimentos.push(registro);
