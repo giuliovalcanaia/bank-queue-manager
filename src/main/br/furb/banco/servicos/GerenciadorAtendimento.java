@@ -82,6 +82,7 @@ public class GerenciadorAtendimento {
         if (guiche.getHistoricoAtendimentos().tamanho() > 0) {
             RegistroAtendimento registroAnterior = guiche.getHistoricoAtendimentos().peek();
             registroAnterior.setHorarioTerminoAtendimento(horarioAtual);
+            registroAnterior.setTempoAtendimento(registroAnterior.calculaTempoAtendimentoMinutos());
             System.out.println(horarioAtual + " - Guichê " + guiche.getId() + " encerrou o atendimento do cliente " + guiche.getHistoricoAtendimentos().peek().getCliente().getId());
         }
 
@@ -124,7 +125,6 @@ public class GerenciadorAtendimento {
 
         // Se um cliente foi selecionado pelas regras acima, cria o registro e salva na pilha do guichê
         if (clienteEscolhido != null) {
-//            Random tempoAtendimento = new Random();
             RegistroAtendimento registro = new RegistroAtendimento(clienteEscolhido, clienteEscolhido.getTipoAtendimento(), horarioAtual, guiche);
             guiche.registrarAtendimento(registro);
             historicoCompleto.push(registro);
