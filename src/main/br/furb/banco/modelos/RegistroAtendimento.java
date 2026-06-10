@@ -12,20 +12,20 @@ public class RegistroAtendimento {
     private LocalTime horarioInicioAtendimento;
     private LocalTime horarioTerminoAtendimento;
     private long tempoEspera;
-    private long tempoAtendimento;
     private TipoAtendimento tipoAtendimento;
+    private Guiche guiche;
 
     /**
      * Construtor da classe RegistroAtendimento.
      * @param cliente Objeto cliente que está sendo atendido (contém ID e horário de entrada).
      * @param horarioInicioAtendimento Horário em que o cliente foi chamado no guichê.
      */
-    public RegistroAtendimento(Cliente cliente, TipoAtendimento tipoAtendimento, LocalTime horarioInicioAtendimento) {
+    public RegistroAtendimento(Cliente cliente, TipoAtendimento tipoAtendimento, LocalTime horarioInicioAtendimento, Guiche guiche) {
         this.cliente = cliente;
         this.tipoAtendimento = tipoAtendimento;
         this.horarioInicioAtendimento = horarioInicioAtendimento;
         this.tempoEspera = calculaTempoEsperaMinutos();
-        this.tempoAtendimento = calculaTempoAtendimentoMinutos();
+        this.guiche = guiche;
     }
 
     private long calculaTempoEsperaMinutos() {
@@ -48,10 +48,6 @@ public class RegistroAtendimento {
         return horarioInicioAtendimento;
     }
 
-    public long getTempoAtendimento() {
-        return tempoAtendimento;
-    }
-
     public TipoAtendimento getTipoAtendimento() {
         return tipoAtendimento;
     }
@@ -72,14 +68,14 @@ public class RegistroAtendimento {
 
     @Override
     public String toString() {
-        return "Registro de atendimento {" +
-                " ClienteID = " + cliente.getId() +
-                ", Tipo = " + cliente.getTipoAtendimento().getDescricao() +
-                ", Chegada = " + cliente.getHorarioChegada() +
-                ", Início = " + getHorarioInicioAtendimento() +
-                ", Término = " + getHorarioTerminoAtendimento()+
-                ", Tempo Espera = " + getTempoEspera() + " min" +
-                ", Tempo Atendimento = " + getTempoAtendimento() + " min" +
-                " }";
+        return "Registro de atendimento" +
+                "\nClienteID = " + cliente.getId() +
+                "\nTipo = " + cliente.getTipoAtendimento().getDescricao() +
+                "\nChegada = " + cliente.getHorarioChegada() +
+                "\nInício = " + getHorarioInicioAtendimento() +
+                "\nTérmino = " + getHorarioTerminoAtendimento()+
+                "\nTempo Espera = " + getTempoEspera() + " min" +
+                "\nTempo Atendimento = " + calculaTempoAtendimentoMinutos() + " min" +
+                "\n-----------------------------------------------------------";
     }
 }
