@@ -10,10 +10,12 @@ public class Guiche {
     private int id;
     private TipoAtendimento tipoAtendimento;
     private PilhaLista<RegistroAtendimento> historicoAtendimentos;
-    private boolean estavaAtendendo;
     private int qtdAtendimentosTotal;
     private int qtdAtendimentosPrioritario;
     private int qtdAtendimentosGeral;
+    private double tempoEsperaMedioGeral;
+    private double tempoEsperaMedioPrioritario;
+    private double tempoEsperaMedioTotal;
 
     /**
      * Construtor do Guichê.
@@ -24,7 +26,6 @@ public class Guiche {
         this.id = id;
         this.tipoAtendimento = tipo;
         this.historicoAtendimentos = new PilhaLista<>();
-        this.estavaAtendendo = false;
     }
 
     /**
@@ -32,10 +33,20 @@ public class Guiche {
      * * @param registro O registro do atendimento recém-finalizado.
      */
     public void registrarAtendimento(RegistroAtendimento registro) {
-        // Empilha o registro na estrutura
-        this.historicoAtendimentos.push(registro);
 
-        // Calcula as métricas
+        // Calcula as médias de tempo
+        long tempoEsperaDesteAtendimento = registro.getTempoEspera();
+        if (registro.getTipoAtendimento() == TipoAtendimento.GERAL) {
+            // Média ponderada
+            this.tempoEsperaMedioGeral = (this.tempoEsperaMedioGeral * this.qtdAtendimentosGeral + tempoEsperaDesteAtendimento) / (this.qtdAtendimentosGeral + 1);
+        } else {
+            // Média ponderada
+            this.tempoEsperaMedioPrioritario = (this.tempoEsperaMedioPrioritario * this.qtdAtendimentosPrioritario + tempoEsperaDesteAtendimento) / (this.qtdAtendimentosPrioritario + 1);
+        }
+        // Média total
+        this.tempoEsperaMedioTotal = (this.tempoEsperaMedioGeral + this.tempoEsperaMedioPrioritario) / 2;
+
+        // Calcula as métricas quantitativas
         this.qtdAtendimentosTotal++;
         if (registro.getTipoAtendimento() == TipoAtendimento.GERAL) {
             this.qtdAtendimentosGeral++;
@@ -43,6 +54,8 @@ public class Guiche {
             this.qtdAtendimentosPrioritario++;
         }
 
+        // Empilha o registro na estrutura
+        this.historicoAtendimentos.push(registro);
     }
 
     // Getters
@@ -71,25 +84,29 @@ public class Guiche {
         return qtdAtendimentosGeral;
     }
 
-    public boolean estavaAtendendo() {
-        return estavaAtendendo;
+    public double getTempoEsperaMedioGeral() {
+        return tempoEsperaMedioGeral;
     }
 
-    // Setters
+    public double getTempoEsperaMedioPrioritario() {
+        return tempoEsperaMedioPrioritario;
+    }
 
-    public void setEstavaAtendendo(boolean estavaAtendendo) {
-        this.estavaAtendendo = estavaAtendendo;
+    public double getTempoEsperaMedioTotal() {
+        return tempoEsperaMedioTotal;
     }
 
     @Override
     public String toString() {
-        return "Guiche { " +
-                "ID = " + id +
-                ", Tipo = " + tipoAtendimento.getDescricao() +
-                ", Histórico (Tamanho) = " + historicoAtendimentos.tamanho() +
-                ", Quantidade de atendimentos geral = " + this.qtdAtendimentosGeral +
-                ", Quantidade de atendimentos prioritário = " + this.qtdAtendimentosPrioritario +
-                ", Quantidade total de atendimentos = " + this.qtdAtendimentosTotal +
-                " }";
+        return "Guiche ID = " + id +
+                "\nTipo = " + tipoAtendimento.getDescricao() +
+                "\nHistórico (Tamanho) = " + historicoAtendimentos.tamanho() +
+                "\nQuantidade de atendimentos geral = " + this.qtdAtendimentosGeral +
+                "\nQuantidade de atendimentos prioritário = " + this.qtdAtendimentosPrioritario +
+                "\nQuantidade total de atendimentos = " + this.qtdAtendimentosTotal +
+                "\nTempo médio de atendimentos geral " + this.tempoEsperaMedioGeral + " min" +
+                "\nTempo médio de atendimentos prioritários " + this.tempoEsperaMedioPrioritario + " min" +
+                "\nTempo médio total dos atendimentos " + this.tempoEsperaMedioTotal +
+                "\n-----------------------------------------------------------";
     }
 }
