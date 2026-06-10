@@ -53,10 +53,8 @@ public class Cliente {
 
     @Override
     public String toString() {
-        return "Cliente { " +
-                "ID = " + getId() +
-                ", Tipo = " + getTipoAtendimento().getDescricao() +
-                ", Chegada = " + getHorarioChegada() +
-                " }";
+        return "Cliente ID = " + getId() +
+                "\nTipo = " + getTipoAtendimento().getDescricao() +
+                "\nChegada = " + getHorarioChegada();
     }
 }
