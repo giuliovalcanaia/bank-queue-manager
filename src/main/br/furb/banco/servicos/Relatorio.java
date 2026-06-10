@@ -1,147 +1,121 @@
 package br.furb.banco.servicos;
 
-import br.furb.banco.estruturas.pilhas.PilhaLista;
 import br.furb.banco.estruturas.ordenacao.OrdenacaoQuickSort;
 import br.furb.banco.modelos.Guiche;
 import br.furb.banco.modelos.RegistroAtendimento;
-import br.furb.banco.modelos.TipoAtendimento;
 import br.furb.banco.utils.RegistroPorHorario;
 import br.furb.banco.utils.RegistroPorTempo;
 
-/**
- * Classe responsável por consolidar as métricas e gerar os relatórios do sistema.
- */
 public class Relatorio {
+    private GerenciadorAtendimento gerenciadorAtendimento;
+    int qtdAtendimentosTotalGlobal = 0;
+    int qtdAtendimentosGeralGlobal = 0;
+    int qtdAtendimentosPrioritarioGlobal = 0;
+    double tempoEsperaMedioGeralGlobal = 0;
+    double tempoEsperaMedioPrioritarioGlobal = 0;
+    double tempoEsperaMedioTotalGlobal = 0;
 
-    /**
-     * Imprime o relatório completo de atendimentos.
-     * @param gerenciador O gerenciador contendo os guichês e os seus históricos.
-     */
-    public void imprimirRelatorio(GerenciadorAtendimento gerenciador) {
-        Guiche[] guiches = gerenciador.getGuiches();
+    public Relatorio(GerenciadorAtendimento gerenciadorAtendimento) {
+        this.gerenciadorAtendimento = gerenciadorAtendimento;
+    }
 
+    public void calculaTempoEsperaGlobal() {
+        Guiche[] guiches = gerenciadorAtendimento.getGuiches();
+
+        for (Guiche g : guiches) {
+            this.tempoEsperaMedioGeralGlobal += Math.round(g.getTempoEsperaMedioGeral() * 100.0) / 100.0;
+            this.tempoEsperaMedioPrioritarioGlobal += Math.round(g.getTempoEsperaMedioPrioritario() * 100.0) / 100.0;
+            this.tempoEsperaMedioTotalGlobal += Math.round(g.getTempoEsperaMedioTotal() * 100.0) / 100.0;
+        }
+    }
+
+    private void calculaQtdAtendimentosGlobal() {
+        Guiche[] guiches = gerenciadorAtendimento.getGuiches();
+
+        // Por meio do laço faz a soma global de atendimentos
+        for (Guiche g : guiches) {
+            this.qtdAtendimentosTotalGlobal += g.getQtdAtendimentosTotal();
+            this.qtdAtendimentosGeralGlobal += g.getQtdAtendimentosGeral();
+            this.qtdAtendimentosPrioritarioGlobal += g.getQtdAtendimentosPrioritario();
+        }
+    }
+
+    public void imprimirRelatorio() {
+        Guiche[] guiches = gerenciadorAtendimento.getGuiches();
+
+        // Saída do relatório
         System.out.println("---------------------------------------------------------");
         System.out.println("Relatório de atendimentos");
         System.out.println("---------------------------------------------------------");
 
-        int totalGeralAtendimentos = 0;
-        int totalGeralNormal = 0;
-        int totalGeralPrioritario = 0;
-        long tempoEsperaTotalGeral = 0;
-        long tempoEsperaTotalNormal = 0;
-        long tempoEsperaTotalPrioritario = 0;
-
-        // Calcula o tamanho para o vetor
+        System.out.println("---------------------------------------------------------");
+        System.out.println("Métricas por guichê");
+        System.out.println("---------------------------------------------------------");
         for (Guiche g : guiches) {
-            totalGeralAtendimentos += g.getHistoricoAtendimentos().tamanho();
-        }
-
-        RegistroAtendimento[] todosRegistros = new RegistroAtendimento[totalGeralAtendimentos];
-        int indexArray = 0;
-
-        // Coletar dados preservando a pilha original
-        for (Guiche guiche : guiches) {
-            int totalGuiche = 0;
-            int normalGuiche = 0;
-            int prioritarioGuiche = 0;
-
-            PilhaLista<RegistroAtendimento> pilhaTemp = new PilhaLista<>();
-            PilhaLista<RegistroAtendimento> historico = guiche.getHistoricoAtendimentos();
-
-            while (!historico.estaVazia()) {
-                RegistroAtendimento registro = historico.pop();
-                pilhaTemp.push(registro);
-
-                todosRegistros[indexArray++] = registro;
-
-                totalGuiche++;
-                long tempoEspera = registro.getTempoEsperaMinutos();
-                tempoEsperaTotalGeral += tempoEspera;
-
-                if (registro.getCliente().getTipoAtendimento() == TipoAtendimento.PREFERENCIAL) {
-                    prioritarioGuiche++;
-                    totalGeralPrioritario++;
-                    tempoEsperaTotalPrioritario += tempoEspera;
-                } else {
-                    normalGuiche++;
-                    totalGeralNormal++;
-                    tempoEsperaTotalNormal += tempoEspera;
-                }
-            }
-
-            // Restaura o histórico
-            while (!pilhaTemp.estaVazia()) {
-                historico.push(pilhaTemp.pop());
-            }
-
-            System.out.println("Guichê " + guiche.getId() + " (" + guiche.getTipoAtendimento().getDescricao() + "):");
-            System.out.println("  - Total de atendimentos: " + totalGuiche);
-            System.out.println("  - Geral: " + normalGuiche + " | Prioritários: " + prioritarioGuiche);
-            System.out.println("-------------------------------------------------");
-        }
-
-        // 3. Métricas Globais
-        System.out.println("MÉTRICAS DE DESEMPENHO GLOBAIS:");
-        System.out.println("Total Geral de Atendimentos: " + totalGeralAtendimentos);
-
-        if (totalGeralAtendimentos > 0) {
-            System.out.println("Tempo Médio de Espera Total: " + ((double) tempoEsperaTotalGeral / totalGeralAtendimentos) + " min");
-        } else {
-            System.out.println("Tempo Médio de Espera Total: 0 min");
-        }
-
-        if (totalGeralPrioritario > 0) {
-            System.out.println("Tempo Médio (Prioritários): " + (tempoEsperaTotalPrioritario / totalGeralPrioritario) + " min");
-        } else {
-            System.out.println("Tempo Médio (Prioritários): 0 min");
-        }
-
-        if (totalGeralNormal > 0) {
-            System.out.println("Tempo Médio (Normais): " + (tempoEsperaTotalNormal / totalGeralNormal) + " min");
-        } else {
-            System.out.println("Tempo Médio (Normais): 0 min");
-        }
-
-        // Executa as ordenações utilizando o QuickSort
-        if (totalGeralAtendimentos > 0) {
-            imprimirOrdenacoes(todosRegistros);
-        }
+        // Imprime relatório individual do guichê
+        System.out.println(g.toString());
     }
 
-    private void imprimirOrdenacoes(RegistroAtendimento[] registros) {
+        // Métricas Globais
+        System.out.println("---------------------------------------------------------");
+        System.out.println("Métricas globais");
+        System.out.println("---------------------------------------------------------");
+        // Faz o cálculo
+        calculaQtdAtendimentosGlobal();
+        calculaTempoEsperaGlobal();
+        System.out.println("Fila geral");
+        System.out.println("Quantidade de atendimentos realizados: " + this.qtdAtendimentosGeralGlobal);
+        System.out.println("Tempo médio de espera na fila: " + this.tempoEsperaMedioGeralGlobal + " min");
+        System.out.println("\nFila prioritária");
+        System.out.println("Quantidade de atendimentos realizados: " + this.qtdAtendimentosPrioritarioGlobal);
+        System.out.println("Tempo médio de espera na fila: " + this.tempoEsperaMedioPrioritarioGlobal + " min" );
+        System.out.println("\nTotal das duas filas");
+        System.out.println("Quantidade de atendimentos realizados: " + this.qtdAtendimentosTotalGlobal);
+        System.out.println("Tempo médio de espera na fila: " + this.tempoEsperaMedioTotalGlobal + " min" );
 
-        // Tempo de espera
-        System.out.println("RELAÇÃO DE ATENDIMENTOS (Ordem Crescente de Tempo de Espera):");
-
-        // Cria o array que será usado para ordenar
-        RegistroPorTempo[] arrayTempo = new RegistroPorTempo[registros.length];
-        for (int i = 0; i < registros.length; i++) {
-            arrayTempo[i] = new RegistroPorTempo(registros[i]);
+        // Converte a Pilha num vetor antes de ordenar por TEMPO
+        RegistroAtendimento[] vetorHistoricoCompleto = new RegistroAtendimento[qtdAtendimentosTotalGlobal];
+        int idx = 0;
+        // Enqunto não estiver vazio
+        while (!gerenciadorAtendimento.getHistoricoCompleto().estaVazia()) {
+            vetorHistoricoCompleto[idx] = gerenciadorAtendimento.getHistoricoCompleto().pop();
+            idx++;
         }
 
+        // Cria dois vetores: por tempo e por horário
+        RegistroPorTempo[] vetorPorTempo = new RegistroPorTempo[qtdAtendimentosTotalGlobal];
+        RegistroPorHorario[] vetorPorHorario = new RegistroPorHorario[qtdAtendimentosTotalGlobal];
+
+        // Preenche os vetores
+        for (int i = 0; i < qtdAtendimentosTotalGlobal; i++) {
+            vetorPorTempo[i] = new RegistroPorTempo(vetorHistoricoCompleto[i]);
+            vetorPorHorario[i] = new RegistroPorHorario(vetorHistoricoCompleto[i]);
+        }
+
+        // Ordena por tempo
         OrdenacaoQuickSort<RegistroPorTempo> quickTempo = new OrdenacaoQuickSort<>();
-        quickTempo.setInfo(arrayTempo);
+        quickTempo.setInfo(vetorPorTempo);
         quickTempo.ordenar();
 
-        for (RegistroPorTempo rt : arrayTempo) {
+        // Imprime por tempo (ordem crescente)
+        System.out.println("\n-----------------------------------------------------------");
+        System.out.println("Registro de atendimentos por tempo de espera");
+        System.out.println("-----------------------------------------------------------");
+        for (RegistroPorTempo rt : vetorPorTempo) {
             System.out.println(rt.getRegistro().toString());
         }
 
-        // Ordem cronológica
-        System.out.println("RELAÇÃO DE ATENDIMENTOS (Ordem Cronológica - Horário Atendimento):");
-
-        RegistroPorHorario[] arrayHorario = new RegistroPorHorario[registros.length];
-        for (int i = 0; i < registros.length; i++) {
-            arrayHorario[i] = new RegistroPorHorario(registros[i]);
-        }
-
+        // Ordena por horário
         OrdenacaoQuickSort<RegistroPorHorario> quickHorario = new OrdenacaoQuickSort<>();
-        quickHorario.setInfo(arrayHorario);
+        quickHorario.setInfo(vetorPorHorario);
         quickHorario.ordenar();
 
-        for (RegistroPorHorario rh : arrayHorario) {
+        // Imprime por horário (ordem cronológica)
+        System.out.println("\n-----------------------------------------------------------");
+        System.out.println("Registro de atendimentos por ordem de início de atendimento");
+        System.out.println("-----------------------------------------------------------");
+        for (RegistroPorHorario rh : vetorPorHorario) {
             System.out.println(rh.getRegistro().toString());
         }
     }
-
 }
