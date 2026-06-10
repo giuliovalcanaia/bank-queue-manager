@@ -1,6 +1,7 @@
 package br.furb.banco.servicos;
 
 import br.furb.banco.estruturas.ordenacao.OrdenacaoQuickSort;
+import br.furb.banco.estruturas.pilhas.PilhaLista;
 import br.furb.banco.modelos.Guiche;
 import br.furb.banco.modelos.RegistroAtendimento;
 import br.furb.banco.utils.RegistroPorHorario;
@@ -21,11 +22,34 @@ public class Relatorio {
 
     public void calculaTempoEsperaGlobal() {
         Guiche[] guiches = gerenciadorAtendimento.getGuiches();
+        double somaTemposGeral = 0;
+        double somaTemposPrioritario = 0;
+        double somaTemposTotal = 0;
 
+        // Faz o somatório
         for (Guiche g : guiches) {
-            this.tempoEsperaMedioGeralGlobal += Math.round(g.getTempoEsperaMedioGeral() * 100.0) / 100.0;
-            this.tempoEsperaMedioPrioritarioGlobal += Math.round(g.getTempoEsperaMedioPrioritario() * 100.0) / 100.0;
-            this.tempoEsperaMedioTotalGlobal += Math.round(g.getTempoEsperaMedioTotal() * 100.0) / 100.0;
+            somaTemposGeral += g.getTempoEsperaMedioGeral() * g.getQtdAtendimentosGeral();
+            somaTemposPrioritario += g.getTempoEsperaMedioPrioritario() * g.getQtdAtendimentosPrioritario();
+            somaTemposTotal += g.getTempoEsperaMedioTotal() * g.getQtdAtendimentosTotal();
+        }
+
+        // Tem que usar este teste para evitar divisão por zero
+        if (this.qtdAtendimentosGeralGlobal > 0) {
+            this.tempoEsperaMedioGeralGlobal = somaTemposGeral / this.qtdAtendimentosGeralGlobal;
+        } else {
+            this.tempoEsperaMedioGeralGlobal = 0;
+        }
+
+        if (this.qtdAtendimentosPrioritarioGlobal > 0) {
+            this.tempoEsperaMedioPrioritarioGlobal = somaTemposPrioritario / this.qtdAtendimentosPrioritarioGlobal;
+        } else {
+            this.tempoEsperaMedioPrioritarioGlobal = 0;
+        }
+
+        if (this.qtdAtendimentosTotalGlobal > 0) {
+            this.tempoEsperaMedioTotalGlobal = somaTemposTotal / this.qtdAtendimentosTotalGlobal;
+        } else {
+            this.tempoEsperaMedioTotalGlobal = 0;
         }
     }
 
@@ -73,12 +97,26 @@ public class Relatorio {
         System.out.println("Quantidade de atendimentos realizados: " + this.qtdAtendimentosTotalGlobal);
         System.out.println("Tempo médio de espera na fila: " + this.tempoEsperaMedioTotalGlobal + " min" );
 
+
         // Converte a Pilha num vetor antes de ordenar por TEMPO
+        PilhaLista<RegistroAtendimento> pilhaOriginal = gerenciadorAtendimento.getHistoricoCompleto();
+        PilhaLista<RegistroAtendimento> pilhaAuxiliar = new PilhaLista<>();
+
+        while (!pilhaOriginal.estaVazia()) {
+            pilhaAuxiliar.push(pilhaOriginal.pop());
+        }
+
         RegistroAtendimento[] vetorHistoricoCompleto = new RegistroAtendimento[qtdAtendimentosTotalGlobal];
         int idx = 0;
-        // Enqunto não estiver vazio
-        while (!gerenciadorAtendimento.getHistoricoCompleto().estaVazia()) {
-            vetorHistoricoCompleto[idx] = gerenciadorAtendimento.getHistoricoCompleto().pop();
+
+        while (!pilhaAuxiliar.estaVazia()) {
+            RegistroAtendimento registro = pilhaAuxiliar.pop();
+
+            // Adiciona no vetor
+            vetorHistoricoCompleto[idx] = registro;
+
+            // Adiciona de volta na pilha original
+            pilhaOriginal.push(registro);
             idx++;
         }
 
