@@ -35,10 +35,13 @@ public class App {
         // Chega mais um cliente e então o guiche 1 chama
         gerenciador.adicionarCliente(new Cliente(7, TipoAtendimento.GERAL, LocalTime.of(11, 25)));
         gerenciador.chamarProximo(1, LocalTime.of(11, 25));
+        gerenciador.chamarProximo(1, LocalTime.of(11, 30));
+        gerenciador.chamarProximo(2, LocalTime.of(11, 30));
+        gerenciador.chamarProximo(3, LocalTime.of(11, 30));
 
         // Gera o Relatório Final
-        Relatorio relatorioService = new Relatorio();
-        relatorioService.imprimirRelatorio(gerenciador);
+        Relatorio relatorioService = new Relatorio(gerenciador);
+        relatorioService.imprimirRelatorio();
 
         System.out.println("Fim da simulação");
     }
