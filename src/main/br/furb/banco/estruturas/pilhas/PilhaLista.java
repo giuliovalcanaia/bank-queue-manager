@@ -16,6 +16,10 @@ public class PilhaLista <T> implements Pilha <T>{
     lista.inserir(info);
   }
 
+  /**
+   * Remove o objeto que está no topo da pilha e retorna
+   * @return topo da pilha
+   */
   @Override
   public T pop() {
     if (this.estaVazia()) {
