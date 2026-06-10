@@ -57,13 +57,16 @@ public class ListaEncadeada<T> {
     anterior = null;
     NoLista<T> ponteiro = new NoLista<>();
     ponteiro = this.primeiro;
-    while (ponteiro != null && ponteiro.getInfo() != valor) {
+    while (ponteiro != null && !ponteiro.getInfo().equals(valor)) {
       anterior = ponteiro;
       ponteiro = ponteiro.getProximo();
     }
     if (ponteiro != null) {
       if (ponteiro == this.primeiro) {
         this.primeiro = ponteiro.getProximo();
+        if (this.primeiro == null) {
+          this.ultimo = null;
+        }
       } else {
         anterior.setProximo(ponteiro.getProximo());
       }
