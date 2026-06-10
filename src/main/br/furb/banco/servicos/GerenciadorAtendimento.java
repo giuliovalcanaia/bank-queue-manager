@@ -1,13 +1,13 @@
 package br.furb.banco.servicos;
 
 import br.furb.banco.estruturas.filas.FilaLista;
+import br.furb.banco.estruturas.pilhas.PilhaLista;
 import br.furb.banco.modelos.Cliente;
 import br.furb.banco.modelos.Guiche;
 import br.furb.banco.modelos.RegistroAtendimento;
 import br.furb.banco.modelos.TipoAtendimento;
 
 import java.time.LocalTime;
-import java.util.Random;
 
 /**
  * Classe responsável por gerenciar as filas de clientes e a lógica de atendimento dos guichês.
@@ -17,7 +17,7 @@ public class GerenciadorAtendimento {
     private FilaLista<Cliente> filaPrioridade;
     private FilaLista<Cliente> filaGeral;
     private Guiche[] guiches;
-    private int consecutivosPrioritariosGerais;
+    private PilhaLista<RegistroAtendimento> historicoCompleto;
 
     /**
      * Construtor do Gerenciador. Inicializa as filas e os guichês.
@@ -28,6 +28,7 @@ public class GerenciadorAtendimento {
         this.filaPrioridade = new FilaLista<>();
         this.filaGeral = new FilaLista<>();
         this.guiches = new Guiche[qtdGuicheNormal + qtdGuichePrioridade];
+        this.historicoCompleto = new PilhaLista<>();
 
         int indexArray = 0;
         int idContador = 1;
@@ -78,68 +79,60 @@ public class GerenciadorAtendimento {
         }
 
         // Fecha o atendimento anterior
-        if (guiche.estavaAtendendo()) {
+        if (guiche.getHistoricoAtendimentos().tamanho() > 0) {
             RegistroAtendimento registroAnterior = guiche.getHistoricoAtendimentos().peek();
             registroAnterior.setHorarioTerminoAtendimento(horarioAtual);
-            System.out.println("Guichê " + guiche.getId() + " encerrou o atendimento do cliente " + guiche.getHistoricoAtendimentos().peek().getCliente().getId());
+            System.out.println(horarioAtual + " - Guichê " + guiche.getId() + " encerrou o atendimento do cliente " + guiche.getHistoricoAtendimentos().peek().getCliente().getId());
         }
 
         // Lógica para escolher o próximo a ser chamado
         Cliente clienteEscolhido = null;
 
         // GUICHÊ PREFERENCIAL: atende EXCULSIVAMENTE a FilaPrioridade
-        // Ignora a flag último foi prioridade
         if (guiche.getTipoAtendimento() == TipoAtendimento.PREFERENCIAL) {
             // Se a fila prioridade não está vazia, chama o próximo prioritário
             if (!filaPrioridade.estaVazia()) {
                 clienteEscolhido = filaPrioridade.retirar();
-            } else {
-                // Mesmo em caso que esta fila esteja vazia, o guichê não pode atender cliente da FilaNormal
-                return null;
             }
         }
 
         // GUICHÊ GERAL: seguem a lógica de alternância equilibrada
-        if (guiche.getTipoAtendimento() == TipoAtendimento.GERAL) {
+        else if (guiche.getTipoAtendimento() == TipoAtendimento.GERAL) {
             // Se os guichês gerais já chamaram um prioritário
-            if (consecutivosPrioritariosGerais >= 1) {
-
-                // Tenta equilibrar chamando a FilaNormal
-                if (!filaGeral.estaVazia()) {
-                    clienteEscolhido = filaGeral.retirar();
-                    consecutivosPrioritariosGerais = 0;
-
-                // Fila normal vazia: não há como equilibrar, atende prioritário
-                } else if (!filaPrioridade.estaVazia()) {
-                    clienteEscolhido = filaPrioridade.retirar();
-                    consecutivosPrioritariosGerais++;
-                }
-            } else {
-                // Nenhum prioritário consecutivo pendente: prioriza FilaPrioridade
+            if (guiche.getHistoricoAtendimentos().estaVazia()) {
                 if (!filaPrioridade.estaVazia()) {
                     clienteEscolhido = filaPrioridade.retirar();
-                    consecutivosPrioritariosGerais++;
-
                 } else if (!filaGeral.estaVazia()) {
-                    // Fila prioritária vazia: atende normal normalmente
                     clienteEscolhido = filaGeral.retirar();
-                    consecutivosPrioritariosGerais = 0;
+                }
+        } else {
+                if (guiche.getHistoricoAtendimentos().peek().getTipoAtendimento() == TipoAtendimento.PREFERENCIAL) {
+                    if (!filaGeral.estaVazia()) {
+                        clienteEscolhido = filaGeral.retirar();
+                    } else if (!filaPrioridade.estaVazia()) {
+                        clienteEscolhido = filaPrioridade.retirar();
+                    }
+                } else {
+                    if (!filaPrioridade.estaVazia()) {
+                        clienteEscolhido = filaPrioridade.retirar();
+                    } else if (!filaGeral.estaVazia()) {
+                        clienteEscolhido = filaGeral.retirar();
+                    }
                 }
             }
-        }
+    }
 
         // Se um cliente foi selecionado pelas regras acima, cria o registro e salva na pilha do guichê
         if (clienteEscolhido != null) {
 //            Random tempoAtendimento = new Random();
-            RegistroAtendimento registro = new RegistroAtendimento(clienteEscolhido, clienteEscolhido.getTipoAtendimento(), horarioAtual);
+            RegistroAtendimento registro = new RegistroAtendimento(clienteEscolhido, clienteEscolhido.getTipoAtendimento(), horarioAtual, guiche);
             guiche.registrarAtendimento(registro);
-            guiche.setEstavaAtendendo(true);
-            System.out.println(horarioAtual + " - Guichê " + guiche.getId() + " chamou " + registro.getCliente().toString());
+            historicoCompleto.push(registro);
+            System.out.println(horarioAtual + " - Guichê " + guiche.getId() + " chamou, e o cliente escolhido foi " + registro.getCliente().getId());
             return registro;
         }
         // Último caso possível: ambas as filas estavam vazias
         System.out.println(horarioAtual + " - Guichê " + guiche.getId() + " chamou mas a fila estava vazia");
-        guiche.setEstavaAtendendo(false);
         return null;
     }
 
@@ -167,5 +160,9 @@ public class GerenciadorAtendimento {
 
     public FilaLista<Cliente> getFilaGeral() {
         return filaGeral;
+    }
+
+    public PilhaLista<RegistroAtendimento> getHistoricoCompleto() {
+        return historicoCompleto;
     }
 }
