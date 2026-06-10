@@ -72,10 +72,19 @@ public class GerenciadorAtendimento {
     public RegistroAtendimento chamarProximo(int idGuiche, LocalTime horarioAtual) {
         Guiche guiche = encontrarGuichePorId(idGuiche);
 
+        // Verificação para evitar erros de null
         if (guiche == null) {
             throw new IllegalArgumentException("Guichê com ID " + idGuiche + " não existe.");
         }
 
+        // Fecha o atendimento anterior
+        if (guiche.estavaAtendendo()) {
+            RegistroAtendimento registroAnterior = guiche.getHistoricoAtendimentos().peek();
+            registroAnterior.setHorarioTerminoAtendimento(horarioAtual);
+            System.out.println("Guichê " + guiche.getId() + " encerrou o atendimento do cliente " + guiche.getHistoricoAtendimentos().peek().getCliente().getId());
+        }
+
+        // Lógica para escolher o próximo a ser chamado
         Cliente clienteEscolhido = null;
 
         // GUICHÊ PREFERENCIAL: atende EXCULSIVAMENTE a FilaPrioridade
@@ -121,14 +130,16 @@ public class GerenciadorAtendimento {
 
         // Se um cliente foi selecionado pelas regras acima, cria o registro e salva na pilha do guichê
         if (clienteEscolhido != null) {
-            Random tempoAtendimento = new Random();
-            RegistroAtendimento registro = new RegistroAtendimento(clienteEscolhido, horarioAtual, tempoAtendimento.nextInt(29) + 2);
+//            Random tempoAtendimento = new Random();
+            RegistroAtendimento registro = new RegistroAtendimento(clienteEscolhido, clienteEscolhido.getTipoAtendimento(), horarioAtual);
             guiche.registrarAtendimento(registro);
+            guiche.setEstavaAtendendo(true);
             System.out.println(horarioAtual + " - Guichê " + guiche.getId() + " chamou " + registro.getCliente().toString());
             return registro;
         }
         // Último caso possível: ambas as filas estavam vazias
         System.out.println(horarioAtual + " - Guichê " + guiche.getId() + " chamou mas a fila estava vazia");
+        guiche.setEstavaAtendendo(false);
         return null;
     }
 
