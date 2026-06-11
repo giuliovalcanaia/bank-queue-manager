@@ -16,21 +16,12 @@ public class Guiche {
     private  double somaTempoEsperaGeral;
     private double somaTempoEsperaPrioritario;
 
-    /**
-     * Construtor do Guichê.
-     * * @param id   Identificador do guichê (ex: 1, 2, 3)
-     * @param tipo Tipo do guichê (ex: TipoAtendimento.PREFERENCIAL, TipoAtendimento.GERAL)
-     */
     public Guiche(int id, TipoAtendimento tipo) {
         this.id = id;
         this.tipoAtendimento = tipo;
         this.historicoAtendimentos = new PilhaLista<>();
     }
 
-    /**
-     * Registra o atendimento empilhando-o no histórico e atualizando as métricas
-     * * @param registro O registro do atendimento recém-finalizado.
-     */
     public void registrarAtendimento(RegistroAtendimento registro) {
 
         // Contador de qtd e soma tempo de atendimentos geral
@@ -112,7 +103,7 @@ public class Guiche {
                 "\nQuantidade total de atendimentos = " + this.qtdAtendimentosTotal +
                 "\nTempo médio de atendimentos geral " + getTempoEsperaMedioGeral() + " min" +
                 "\nTempo médio de atendimentos prioritários " + getTempoEsperaMedioPrioritario() + " min" +
-                "\nTempo médio total dos atendimentos " + getTempoEsperaMedioTotal() +
+                "\nTempo médio total dos atendimentos " + getTempoEsperaMedioTotal() + " min" +
                 "\n-----------------------------------------------------------";
     }
 }
