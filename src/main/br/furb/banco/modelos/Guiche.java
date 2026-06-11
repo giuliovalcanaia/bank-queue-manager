@@ -13,9 +13,8 @@ public class Guiche {
     private int qtdAtendimentosTotal;
     private int qtdAtendimentosPrioritario;
     private int qtdAtendimentosGeral;
-    private double tempoEsperaMedioGeral;
-    private double tempoEsperaMedioPrioritario;
-    private double tempoEsperaMedioTotal;
+    private  double somaTempoEsperaGeral;
+    private double somaTempoEsperaPrioritario;
 
     /**
      * Construtor do Guichê.
@@ -34,28 +33,16 @@ public class Guiche {
      */
     public void registrarAtendimento(RegistroAtendimento registro) {
 
-        // Calcula as médias de tempo
-        long tempoEsperaDesteAtendimento = registro.getTempoEspera();
+        // Contador de qtd e soma tempo de atendimentos geral
         if (registro.getTipoAtendimento() == TipoAtendimento.GERAL) {
-            // Média ponderada
-            this.tempoEsperaMedioGeral = (this.tempoEsperaMedioGeral * this.qtdAtendimentosGeral + tempoEsperaDesteAtendimento) / (this.qtdAtendimentosGeral + 1);
-        } else {
-            // Média ponderada
-            this.tempoEsperaMedioPrioritario = (this.tempoEsperaMedioPrioritario * this.qtdAtendimentosPrioritario + tempoEsperaDesteAtendimento) / (this.qtdAtendimentosPrioritario + 1);
-        }
-
-        // Calcula as métricas quantitativas
-        this.qtdAtendimentosTotal++;
-        if (registro.getTipoAtendimento() == TipoAtendimento.GERAL) {
+            this.somaTempoEsperaGeral += registro.getTempoEspera();
             this.qtdAtendimentosGeral++;
+        // Contador de qtd e soma tempo de atendimentos prioritário
         } else {
+            this.somaTempoEsperaPrioritario += registro.getTempoEspera();
             this.qtdAtendimentosPrioritario++;
         }
-
-        // Média total
-        this.tempoEsperaMedioTotal = (this.tempoEsperaMedioGeral * qtdAtendimentosGeral + this.tempoEsperaMedioPrioritario * qtdAtendimentosPrioritario) / (qtdAtendimentosTotal);
-
-        // Empilha o registro na estrutura
+        this.qtdAtendimentosTotal++;
         this.historicoAtendimentos.push(registro);
     }
 
@@ -85,16 +72,34 @@ public class Guiche {
         return qtdAtendimentosGeral;
     }
 
+    public double getSomaTempoEsperaGeral() {
+        return somaTempoEsperaGeral;
+    }
+
+    public double getSomaTempoEsperaPrioritario() {
+        return somaTempoEsperaPrioritario;
+    }
+
     public double getTempoEsperaMedioGeral() {
-        return tempoEsperaMedioGeral;
+        // teste para evitar divisão por zero
+        if (qtdAtendimentosGeral > 0) {
+            return somaTempoEsperaGeral / qtdAtendimentosGeral;
+        }
+        return 0;
     }
 
     public double getTempoEsperaMedioPrioritario() {
-        return tempoEsperaMedioPrioritario;
+        if (qtdAtendimentosPrioritario > 0) {
+            return somaTempoEsperaPrioritario / qtdAtendimentosPrioritario;
+        }
+        return 0;
     }
 
     public double getTempoEsperaMedioTotal() {
-        return tempoEsperaMedioTotal;
+        if (qtdAtendimentosTotal > 0) {
+            return (somaTempoEsperaGeral + somaTempoEsperaPrioritario) / qtdAtendimentosTotal;
+        }
+        return 0;
     }
 
     @Override
@@ -105,9 +110,9 @@ public class Guiche {
                 "\nQuantidade de atendimentos geral = " + this.qtdAtendimentosGeral +
                 "\nQuantidade de atendimentos prioritário = " + this.qtdAtendimentosPrioritario +
                 "\nQuantidade total de atendimentos = " + this.qtdAtendimentosTotal +
-                "\nTempo médio de atendimentos geral " + this.tempoEsperaMedioGeral + " min" +
-                "\nTempo médio de atendimentos prioritários " + this.tempoEsperaMedioPrioritario + " min" +
-                "\nTempo médio total dos atendimentos " + this.tempoEsperaMedioTotal +
+                "\nTempo médio de atendimentos geral " + getTempoEsperaMedioGeral() + " min" +
+                "\nTempo médio de atendimentos prioritários " + getTempoEsperaMedioPrioritario() + " min" +
+                "\nTempo médio total dos atendimentos " + getTempoEsperaMedioTotal() +
                 "\n-----------------------------------------------------------";
     }
 }
