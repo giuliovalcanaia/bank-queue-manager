@@ -21,39 +21,34 @@ public class Relatorio {
     }
 
     public void calculaTempoEsperaGlobal() {
-        Guiche[] guiches = gerenciadorAtendimento.getGuiches();
-        double somaTemposGeral = 0;
-        double somaTemposPrioritario = 0;
-        double somaTemposTotal = 0;
+        double somaGeral = 0;
+        double somaPrioritario = 0;
 
-        // Faz o somatório
-        for (Guiche g : guiches) {
-            somaTemposGeral += g.getTempoEsperaMedioGeral() * g.getQtdAtendimentosGeral();
-            somaTemposPrioritario += g.getTempoEsperaMedioPrioritario() * g.getQtdAtendimentosPrioritario();
-            somaTemposTotal += g.getTempoEsperaMedioTotal() * g.getQtdAtendimentosTotal();
+        for (Guiche g : gerenciadorAtendimento.getGuiches()) {
+            somaGeral += g.getSomaTempoEsperaGeral();
+            somaPrioritario += g.getSomaTempoEsperaPrioritario();
         }
 
-        // Tem que usar este teste para evitar divisão por zero
-        if (this.qtdAtendimentosGeralGlobal > 0) {
-            this.tempoEsperaMedioGeralGlobal = somaTemposGeral / this.qtdAtendimentosGeralGlobal;
+        if (qtdAtendimentosGeralGlobal > 0) {
+            this.tempoEsperaMedioGeralGlobal = somaGeral / qtdAtendimentosGeralGlobal;
         } else {
-            this.tempoEsperaMedioGeralGlobal = 0;
+            this.tempoEsperaMedioTotalGlobal = 0;
         }
 
-        if (this.qtdAtendimentosPrioritarioGlobal > 0) {
-            this.tempoEsperaMedioPrioritarioGlobal = somaTemposPrioritario / this.qtdAtendimentosPrioritarioGlobal;
+        if (qtdAtendimentosPrioritarioGlobal > 0) {
+            this.tempoEsperaMedioPrioritarioGlobal = somaPrioritario / qtdAtendimentosPrioritarioGlobal;
         } else {
             this.tempoEsperaMedioPrioritarioGlobal = 0;
         }
 
-        if (this.qtdAtendimentosTotalGlobal > 0) {
-            this.tempoEsperaMedioTotalGlobal = somaTemposTotal / this.qtdAtendimentosTotalGlobal;
+        if (qtdAtendimentosTotalGlobal > 0) {
+            this.tempoEsperaMedioTotalGlobal = (somaGeral + somaPrioritario) / qtdAtendimentosTotalGlobal;
         } else {
             this.tempoEsperaMedioTotalGlobal = 0;
         }
     }
 
-    private void calculaQtdAtendimentosGlobal() {
+    public void calculaQtdAtendimentosGlobal() {
         Guiche[] guiches = gerenciadorAtendimento.getGuiches();
 
         // Por meio do laço faz a soma global de atendimentos
