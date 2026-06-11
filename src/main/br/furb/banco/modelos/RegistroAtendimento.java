@@ -62,6 +62,10 @@ public class RegistroAtendimento {
         return horarioTerminoAtendimento;
     }
 
+    public long getTempoAtendimento() {
+        return tempoAtendimento;
+    }
+
     // Setters
 
     public void setHorarioTerminoAtendimento(LocalTime horarioTerminoAtendimento) {
