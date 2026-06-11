@@ -21,10 +21,13 @@ public class App {
         gerenciador.adicionarCliente(new Cliente(2, TipoAtendimento.PREFERENCIAL, LocalTime.of(10, 5)));
         gerenciador.adicionarCliente(new Cliente(3, TipoAtendimento.GERAL, LocalTime.of(10, 10)));
         gerenciador.chamarProximo(1, LocalTime.of(10, 10));
+
         gerenciador.adicionarCliente(new Cliente(4, TipoAtendimento.PREFERENCIAL, LocalTime.of(10, 15)));
         gerenciador.chamarProximo(2, LocalTime.of(10, 16));
+
         gerenciador.adicionarCliente(new Cliente(5, TipoAtendimento.GERAL, LocalTime.of(10, 20)));
         gerenciador.chamarProximo(3, LocalTime.of(10, 21));
+
         gerenciador.adicionarCliente(new Cliente(6, TipoAtendimento.PREFERENCIAL, LocalTime.of(10, 25)));
         gerenciador.chamarProximo(2, LocalTime.of(10, 40));
         gerenciador.chamarProximo(1, LocalTime.of(10, 45));
