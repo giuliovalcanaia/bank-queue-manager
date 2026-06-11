@@ -19,11 +19,6 @@ public class GerenciadorAtendimento {
     private Guiche[] guiches;
     private PilhaLista<RegistroAtendimento> historicoCompleto;
 
-    /**
-     * Construtor do Gerenciador. Inicializa as filas e os guichês.
-     * @param qtdGuicheNormal quantidade de guichês para atendimento normal
-     * @param qtdGuichePrioridade quantidade de guichês para atendimento prioritário
-     */
     public GerenciadorAtendimento(int qtdGuicheNormal, int qtdGuichePrioridade) {
         this.filaPrioridade = new FilaLista<>();
         this.filaGeral = new FilaLista<>();
@@ -46,10 +41,6 @@ public class GerenciadorAtendimento {
         }
     }
 
-    /**
-     * Insere um cliente na fila correspondente (Prioritária ou Normal).
-     * @param cliente Objeto cliente a ser adicionado.
-     */
     public void adicionarCliente(Cliente cliente) {
         if (cliente == null) {
             return;
@@ -64,12 +55,6 @@ public class GerenciadorAtendimento {
         }
     }
 
-    /**
-     * Executa a regra de chamar o próximo cliente para um guichê específico.
-     * @param idGuiche ID do guichê que está disponível para atender (1, 2 ou 3).
-     * @param horarioAtual Horário da simulação em que o cliente é chamado.
-     * @return O RegistroAtendimento gerado ou null se nenhum cliente foi atendido.
-     */
     public RegistroAtendimento chamarProximo(int idGuiche, LocalTime horarioAtual) {
         Guiche guiche = encontrarGuichePorId(idGuiche);
 
@@ -97,9 +82,9 @@ public class GerenciadorAtendimento {
             }
         }
 
-        // GUICHÊ GERAL: seguem a lógica de alternância equilibrada
+        // GUICHÊ GERAL: segue a lógica de alternância
         else if (guiche.getTipoAtendimento() == TipoAtendimento.GERAL) {
-            // Se os guichês gerais já chamaram um prioritário
+            // Se os guichês gerais ainda não chamaram ninguém
             if (guiche.getHistoricoAtendimentos().estaVazia()) {
                 if (!filaPrioridade.estaVazia()) {
                     clienteEscolhido = filaPrioridade.retirar();
@@ -107,12 +92,14 @@ public class GerenciadorAtendimento {
                     clienteEscolhido = filaGeral.retirar();
                 }
         } else {
+                // Caso último atendimento foi PREFERENCIAL
                 if (guiche.getHistoricoAtendimentos().peek().getTipoAtendimento() == TipoAtendimento.PREFERENCIAL) {
                     if (!filaGeral.estaVazia()) {
                         clienteEscolhido = filaGeral.retirar();
                     } else if (!filaPrioridade.estaVazia()) {
                         clienteEscolhido = filaPrioridade.retirar();
                     }
+                // Caso último atendimento foi GERAL
                 } else {
                     if (!filaPrioridade.estaVazia()) {
                         clienteEscolhido = filaPrioridade.retirar();
@@ -128,7 +115,7 @@ public class GerenciadorAtendimento {
             RegistroAtendimento registro = new RegistroAtendimento(clienteEscolhido, clienteEscolhido.getTipoAtendimento(), horarioAtual, guiche);
             guiche.registrarAtendimento(registro);
             historicoCompleto.push(registro);
-            System.out.println(horarioAtual + " - Guichê " + guiche.getId() + " chamou, e o cliente escolhido foi " + registro.getCliente().getId());
+            System.out.println(horarioAtual + " - Guichê " + guiche.getId() + " chamou, e o cliente escolhido foi ID " + registro.getCliente().getId());
             return registro;
         }
         // Último caso possível: ambas as filas estavam vazias
@@ -136,9 +123,6 @@ public class GerenciadorAtendimento {
         return null;
     }
 
-    /**
-     * Método auxiliar para localizar um guichê no meio de um vetor, pelo ID estruturado no construtor.
-     */
     private Guiche encontrarGuichePorId(int id) {
         for (Guiche g : guiches) {
             if (g.getId() == id) {
