@@ -1,6 +1,7 @@
-# Sistema gerenciador de fila de atendimento bancário 
+# Sistema gerenciador de fila de atendimento bancário
+
 ## Diagrama de classes simplificado
-Contém as principais partes do projeto, com excessão das classes de estruturas de dados.
+Contém as principais partes do projeto, com exceção das classes de estruturas de dados.
 ```mermaid
 classDiagram
 
@@ -47,7 +48,6 @@ classDiagram
         }
     }
 
-
     %% Utils
     namespace Utils {
         class RegistroPorTempo {
@@ -75,23 +75,23 @@ classDiagram
 
         class Relatorio {
             -gerenciadorAtendimento: GerenciadorAtendimento
-            -qtdAtendimentosTotalGlobal: int
-            -qtdAtendimentosGeralGlobal: int
-            -qtdAtendimentosPrioritarioGlobal: int
-            -tempoEsperaMedioGeralGlobal: double
-            -tempoEsperaMedioPrioritarioGlobal: double
-            -tempoEsperaMedioTotalGlobal: double
+            ~qtdAtendimentosTotalGlobal: int
+            ~qtdAtendimentosGeralGlobal: int
+            ~qtdAtendimentosPrioritarioGlobal: int
+            ~tempoEsperaMedioGeralGlobal: double
+            ~tempoEsperaMedioPrioritarioGlobal: double
+            ~tempoEsperaMedioTotalGlobal: double
             +calculaTempoEsperaGlobal() void
             +calculaQtdAtendimentosGlobal() void
             +imprimirRelatorio() void
         }
     }
     
-    %% Estruturas
+    %% Estruturas (referenciadas mas não detalhadas)
     namespace Estruturas {
         class PilhaLista~T~
         class FilaLista~T~ 
-        class OrdenacaoQuickSort
+        class OrdenacaoQuickSort~T~
     }
     
     %% Relações
@@ -101,12 +101,12 @@ classDiagram
     RegistroPorHorario ..|> Comparable
 
     %% Modelos
-    %% *-- = composição, ou seja, as classes só fazem sentido juntas
-    
     RegistroAtendimento "1" *-- "1" Cliente
+    RegistroAtendimento "1" *-- "1" TipoAtendimento
+    RegistroAtendimento "1" *-- "1" Guiche
     Guiche "1" *-- "1" TipoAtendimento
     Guiche "1" *-- "1" PilhaLista~RegistroAtendimento~
-    Cliente  "1" *-- "1" TipoAtendimento
+    Cliente "1" *-- "1" TipoAtendimento
 
     %% Utils
     RegistroPorTempo "1" *-- "1" RegistroAtendimento
@@ -114,7 +114,8 @@ classDiagram
 
     %% Serviços
     GerenciadorAtendimento "1" *-- "1..*" Guiche
-    GerenciadorAtendimento "1" *-- "1" FilaLista~Cliente~
+    GerenciadorAtendimento "1" *-- "2" FilaLista~Cliente~
+    GerenciadorAtendimento "1" *-- "1" PilhaLista~RegistroAtendimento~
     Relatorio --> GerenciadorAtendimento
     Relatorio --> OrdenacaoQuickSort~T~
     Relatorio --> RegistroPorTempo
@@ -122,7 +123,7 @@ classDiagram
 ```
 
 ## Diagrama de classes completo
-Contém o diagrama de todas as classes, inclusive relativo às classes das estruturas de dados.
+Contém o diagrama de todas as classes, inclusive as de estruturas de dados.
 ```mermaid
 classDiagram
 
@@ -162,7 +163,6 @@ classDiagram
         class ListaEncadeada~T~ {
             -primeiro: NoLista~T~
             -ultimo: NoLista~T~
-            +ListaEncadeada()
             +getPrimeiro() NoLista~T~
             +getUltimo() NoLista~T~
             +inserir(valor: T) void
@@ -177,7 +177,6 @@ classDiagram
 
         class PilhaLista~T~ {
             -lista: ListaEncadeada~T~
-            +PilhaLista()
             +push(info: T) void
             +pop() T
             +peek() T
@@ -259,12 +258,22 @@ classDiagram
         class RegistroAtendimento {
             -cliente: Cliente
             -horarioInicioAtendimento: LocalTime
-            -tempoAtendimento: int
-            +RegistroAtendimento(cliente: Cliente, horarioInicioAtendimento: LocalTime, tempoAtendimento: int)
-            +getTempoEsperaMinutos() long
+            -horarioTerminoAtendimento: LocalTime
+            -tempoEspera: long
+            -tempoAtendimento: long
+            -tipoAtendimento: TipoAtendimento
+            -guiche: Guiche
+            +RegistroAtendimento(cliente: Cliente, tipoAtendimento: TipoAtendimento, horarioInicioAtendimento: LocalTime, guiche: Guiche)
+            -calculaTempoEsperaMinutos() long
+            +calculaTempoAtendimentoMinutos() long
             +getCliente() Cliente
             +getHorarioInicioAtendimento() LocalTime
-            +getTempoAtendimento() int
+            +getHorarioTerminoAtendimento() LocalTime
+            +getTipoAtendimento() TipoAtendimento
+            +getTempoEspera() long
+            +getTempoAtendimento() long
+            +setHorarioTerminoAtendimento(h: LocalTime) void
+            +setTempoAtendimento(t: long) void
             +toString() String
         }
 
@@ -272,15 +281,27 @@ classDiagram
             -id: int
             -tipoAtendimento: TipoAtendimento
             -historicoAtendimentos: PilhaLista~RegistroAtendimento~
+            -qtdAtendimentosTotal: int
+            -qtdAtendimentosPrioritario: int
+            -qtdAtendimentosGeral: int
+            -somaTempoEsperaGeral: double
+            -somaTempoEsperaPrioritario: double
             +Guiche(id: int, tipo: TipoAtendimento)
             +registrarAtendimento(registro: RegistroAtendimento) void
             +getId() int
             +getTipoAtendimento() TipoAtendimento
             +getHistoricoAtendimentos() PilhaLista~RegistroAtendimento~
+            +getQtdAtendimentosTotal() int
+            +getQtdAtendimentosGeral() int
+            +getQtdAtendimentosPrioritario() int
+            +getSomaTempoEsperaGeral() double
+            +getSomaTempoEsperaPrioritario() double
+            +getTempoEsperaMedioGeral() double
+            +getTempoEsperaMedioPrioritario() double
+            +getTempoEsperaMedioTotal() double
             +toString() String
         }
     }
-
 
     %% UTILS
     namespace Utils {
@@ -288,7 +309,6 @@ classDiagram
             -registro: RegistroAtendimento
             +RegistroPorTempo(registro: RegistroAtendimento)
             +getRegistro() RegistroAtendimento
-            +setRegistro(registro: RegistroAtendimento) void
             +compareTo(outro: RegistroPorTempo) int
         }
 
@@ -296,7 +316,6 @@ classDiagram
             -registro: RegistroAtendimento
             +RegistroPorHorario(registro: RegistroAtendimento)
             +getRegistro() RegistroAtendimento
-            +setRegistro(registro: RegistroAtendimento) void
             +compareTo(outro: RegistroPorHorario) int
         }
     }
@@ -307,7 +326,7 @@ classDiagram
             -filaPrioridade: FilaLista~Cliente~
             -filaGeral: FilaLista~Cliente~
             -guiches: Guiche[]
-            -consecutivosPrioritariosGerais: int
+            -historicoCompleto: PilhaLista~RegistroAtendimento~
             +GerenciadorAtendimento(qtdGuicheNormal: int, qtdGuichePrioridade: int)
             +adicionarCliente(cliente: Cliente) void
             +chamarProximo(idGuiche: int, horarioAtual: LocalTime) RegistroAtendimento
@@ -315,11 +334,21 @@ classDiagram
             +getGuiches() Guiche[]
             +getFilaPrioridade() FilaLista~Cliente~
             +getFilaGeral() FilaLista~Cliente~
+            +getHistoricoCompleto() PilhaLista~RegistroAtendimento~
         }
 
         class Relatorio {
-            +imprimirRelatorio(gerenciador: GerenciadorAtendimento) void
-            -imprimirOrdenacoes(registros: RegistroAtendimento[]) void
+            -gerenciadorAtendimento: GerenciadorAtendimento
+            ~qtdAtendimentosTotalGlobal: int
+            ~qtdAtendimentosGeralGlobal: int
+            ~qtdAtendimentosPrioritarioGlobal: int
+            ~tempoEsperaMedioGeralGlobal: double
+            ~tempoEsperaMedioPrioritarioGlobal: double
+            ~tempoEsperaMedioTotalGlobal: double
+            +Relatorio(gerenciadorAtendimento: GerenciadorAtendimento)
+            +calculaTempoEsperaGlobal() void
+            +calculaQtdAtendimentosGlobal() void
+            +imprimirRelatorio() void
         }
     }
 
@@ -342,24 +371,27 @@ classDiagram
     FilaVaziaException --|> RuntimeException
     FilaCheiaException --|> RuntimeException
 
-    %% Composição
+    %% Composição interna das estruturas
     ListaEncadeada~T~ "1" *-- "0..*" NoLista~T~
     PilhaLista~T~ "1" *-- "1" ListaEncadeada~T~
     FilaLista~T~ "1" *-- "1" ListaEncadeada~T~
 
     %% Modelos
     RegistroAtendimento "1" *-- "1" Cliente
+    RegistroAtendimento "1" *-- "1" TipoAtendimento
+    RegistroAtendimento "1" *-- "1" Guiche
     Guiche "1" *-- "1" TipoAtendimento
     Guiche "1" *-- "1" PilhaLista~RegistroAtendimento~
     Cliente "1" *-- "1" TipoAtendimento
 
     %% Utils
-    RegistroPorTempo "1"  *--  "1"  RegistroAtendimento
-    RegistroPorHorario "1"  *--  "1"  RegistroAtendimento
+    RegistroPorTempo "1" *-- "1" RegistroAtendimento
+    RegistroPorHorario "1" *-- "1" RegistroAtendimento
 
     %% Serviços
-    GerenciadorAtendimento  "1"  *--  "1..*"  Guiche
-    GerenciadorAtendimento  "1"  *--  "2"     FilaLista~Cliente~
+    GerenciadorAtendimento "1" *-- "1..*" Guiche
+    GerenciadorAtendimento "1" *-- "2" FilaLista~Cliente~
+    GerenciadorAtendimento "1" *-- "1" PilhaLista~RegistroAtendimento~
     Relatorio --> GerenciadorAtendimento
     Relatorio --> OrdenacaoQuickSort~T~
     Relatorio --> RegistroPorTempo
