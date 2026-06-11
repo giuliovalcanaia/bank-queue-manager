@@ -66,22 +66,22 @@ public class RelatorioTest {
     @Test
     @DisplayName("Valida métricas fila geral")
     public void validaMetricasFilaGeral() {
-        assertEquals(4, relatorio.qtdAtendimentosGeralGlobal);
-        assertEquals(28.75, relatorio.tempoEsperaMedioGeralGlobal, 0.01);
+        assertEquals(4, relatorio.getQtdAtendimentosGeralGlobal());
+        assertEquals(28.75, relatorio.getTempoEsperaMedioGeralGlobal(), 0.01);
     }
 
     @Test
     @DisplayName("Valida métricas fila prioritária")
     public void testMetricasFilaPrioritaria() {
-        assertEquals(3, relatorio.qtdAtendimentosPrioritarioGlobal);
-        assertEquals(10.33, relatorio.tempoEsperaMedioPrioritarioGlobal, 0.01);
+        assertEquals(3, relatorio.getQtdAtendimentosPrioritarioGlobal());
+        assertEquals(10.33, relatorio.getTempoEsperaMedioPrioritarioGlobal(), 0.01);
     }
 
     @Test
     @DisplayName("Valida métricas globais")
     public void testMetricasGlobaisTotais() {
-        assertEquals(7, relatorio.qtdAtendimentosTotalGlobal);
-        assertEquals(20.85, relatorio.tempoEsperaMedioTotalGlobal, 0.01);
+        assertEquals(7, relatorio.getQtdAtendimentosTotalGlobal());
+        assertEquals(20.85, relatorio.getTempoEsperaMedioTotalGlobal(), 0.01);
     }
 
     @Test
