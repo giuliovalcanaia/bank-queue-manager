@@ -16,11 +16,6 @@ public class RegistroAtendimento {
     private TipoAtendimento tipoAtendimento;
     private Guiche guiche;
 
-    /**
-     * Construtor da classe RegistroAtendimento.
-     * @param cliente Objeto cliente que está sendo atendido (contém ID e horário de entrada).
-     * @param horarioInicioAtendimento Horário em que o cliente foi chamado no guichê.
-     */
     public RegistroAtendimento(Cliente cliente, TipoAtendimento tipoAtendimento, LocalTime horarioInicioAtendimento, Guiche guiche) {
         this.cliente = cliente;
         this.tipoAtendimento = tipoAtendimento;
