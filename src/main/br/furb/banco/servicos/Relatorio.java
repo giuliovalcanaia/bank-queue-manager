@@ -71,23 +71,27 @@ public class Relatorio {
         System.out.println("Métricas por guichê");
         System.out.println("---------------------------------------------------------");
         for (Guiche g : guiches) {
-        // Imprime relatório individual do guichê
-        System.out.println(g.toString());
-    }
+            // Imprime relatório individual do guichê
+            System.out.println(g.toString());
+        }
 
         // Métricas Globais
         System.out.println("---------------------------------------------------------");
         System.out.println("Métricas globais");
         System.out.println("---------------------------------------------------------");
+
         // Faz o cálculo
         calculaQtdAtendimentosGlobal();
         calculaTempoEsperaGlobal();
+
         System.out.println("Fila geral");
         System.out.println("Quantidade de atendimentos realizados: " + this.qtdAtendimentosGeralGlobal);
         System.out.println("Tempo médio de espera na fila: " + this.tempoEsperaMedioGeralGlobal + " min");
+
         System.out.println("\nFila prioritária");
         System.out.println("Quantidade de atendimentos realizados: " + this.qtdAtendimentosPrioritarioGlobal);
         System.out.println("Tempo médio de espera na fila: " + this.tempoEsperaMedioPrioritarioGlobal + " min" );
+
         System.out.println("\nTotal das duas filas");
         System.out.println("Quantidade de atendimentos realizados: " + this.qtdAtendimentosTotalGlobal);
         System.out.println("Tempo médio de espera na fila: " + this.tempoEsperaMedioTotalGlobal + " min" );
@@ -101,6 +105,7 @@ public class Relatorio {
             pilhaAuxiliar.push(pilhaOriginal.pop());
         }
 
+        // Vetor que será convertido em dois vetores: registro por horário e por tempo
         RegistroAtendimento[] vetorHistoricoCompleto = new RegistroAtendimento[qtdAtendimentosTotalGlobal];
         int idx = 0;
 
