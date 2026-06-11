@@ -1,6 +1,5 @@
 name: Testes Automatizados (Gradle)
 
-# Qualquer push ou pull request nas branches principais dispara o teste
 on:
   push:
     branches: [ "main", "master" ]
