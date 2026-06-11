@@ -78,8 +78,8 @@ public class GerenciadorAtendimento {
             throw new IllegalArgumentException("Guichê com ID " + idGuiche + " não existe.");
         }
 
-        // Fecha o atendimento anterior
-        if (guiche.getHistoricoAtendimentos().tamanho() > 0) {
+        // Fecha o atendimento anterior. Teste: verifica se o histórico não está vazio e o tempo atendimento é -1
+        if (!guiche.getHistoricoAtendimentos().estaVazia() && guiche.getHistoricoAtendimentos().peek().getTempoAtendimento() == - 1) {
             RegistroAtendimento registroAnterior = guiche.getHistoricoAtendimentos().peek();
             registroAnterior.setHorarioTerminoAtendimento(horarioAtual);
             registroAnterior.setTempoAtendimento(registroAnterior.calculaTempoAtendimentoMinutos());
