@@ -9,12 +9,12 @@ import br.furb.banco.utils.RegistroPorTempo;
 
 public class Relatorio {
     private GerenciadorAtendimento gerenciadorAtendimento;
-    int qtdAtendimentosTotalGlobal = 0;
-    int qtdAtendimentosGeralGlobal = 0;
-    int qtdAtendimentosPrioritarioGlobal = 0;
-    double tempoEsperaMedioGeralGlobal = 0;
-    double tempoEsperaMedioPrioritarioGlobal = 0;
-    double tempoEsperaMedioTotalGlobal = 0;
+    private int qtdAtendimentosTotalGlobal = 0;
+    private int qtdAtendimentosGeralGlobal = 0;
+    private int qtdAtendimentosPrioritarioGlobal = 0;
+    private double tempoEsperaMedioGeralGlobal = 0;
+    private double tempoEsperaMedioPrioritarioGlobal = 0;
+    private double tempoEsperaMedioTotalGlobal = 0;
 
     public Relatorio(GerenciadorAtendimento gerenciadorAtendimento) {
         this.gerenciadorAtendimento = gerenciadorAtendimento;
@@ -155,5 +155,31 @@ public class Relatorio {
         for (RegistroPorHorario rh : vetorPorHorario) {
             System.out.println(rh.getRegistro().toString());
         }
+    }
+
+    // Getters
+
+    public int getQtdAtendimentosTotalGlobal() {
+        return qtdAtendimentosTotalGlobal;
+    }
+
+    public int getQtdAtendimentosGeralGlobal() {
+        return qtdAtendimentosGeralGlobal;
+    }
+
+    public int getQtdAtendimentosPrioritarioGlobal() {
+        return qtdAtendimentosPrioritarioGlobal;
+    }
+
+    public double getTempoEsperaMedioGeralGlobal() {
+        return tempoEsperaMedioGeralGlobal;
+    }
+
+    public double getTempoEsperaMedioPrioritarioGlobal() {
+        return tempoEsperaMedioPrioritarioGlobal;
+    }
+
+    public double getTempoEsperaMedioTotalGlobal() {
+        return tempoEsperaMedioTotalGlobal;
     }
 }
