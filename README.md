@@ -1,6 +1,6 @@
 # Sistema gerenciador de fila de atendimento bancário 
 ## Diagrama de classes simplificado
-Contém as classes do projeto com exceção das classes de estruturas de dados
+Contém as principais partes do projeto, com excessão das classes de estruturas de dados.
 ```mermaid
 classDiagram
 
@@ -23,8 +23,13 @@ classDiagram
         class RegistroAtendimento {
             -cliente: Cliente
             -horarioInicioAtendimento: LocalTime
-            -tempoAtendimento: int
-            +getTempEsperaMinutos() long
+            -horarioTerminoAtendimento: LocalTime
+            -tempoEspera: long
+            -tempoAtendimento: long
+            -tipoAtendimento: TipoAtendimento
+            -guiche: Guiche
+            -calculaTempoEsperaMinutos() long
+            +calculaTempoAtendimentoMinutos() long
             +toString() String
         }
 
@@ -32,6 +37,11 @@ classDiagram
             -id: int
             -tipoAtendimento: TipoAtendimento
             -historicoAtendimentos: PilhaLista~RegistroAtendimento~
+            -qtdAtendimentosTotal: int
+            -qtdAtendimentosPrioritario: int
+            -qtdAtendimentosGeral: int
+            -somaTempoEsperaGeral: double
+            -somaTempoEsperaPrioritario: double
             +registrarAtendimento(registro: RegistroAtendimento) void
             +toString() String
         }
@@ -46,7 +56,7 @@ classDiagram
         }
 
         class RegistroPorHorario {
-            +registro: RegistroAtendimento
+            -registro: RegistroAtendimento
             +compareTo(outro: RegistroPorHorario) int
         }
     }
@@ -55,17 +65,25 @@ classDiagram
     namespace Servicos {
         class GerenciadorAtendimento {
             -filaPrioridade: FilaLista~Cliente~
-            -filaNormal: FilaLista~Cliente~
+            -filaGeral: FilaLista~Cliente~
             -guiches: Guiche[]
-            -consecutivosPrioritariosGerais: int
+            -historicoCompleto: PilhaLista~RegistroAtendimento~
             +adicionarCliente(cliente: Cliente) void
             +chamarProximo(idGuiche: int, horarioAtual: LocalTime) RegistroAtendimento
             -encontrarGuichePorId(id: int) Guiche
         }
 
         class Relatorio {
-            +imprimirRelatorio(gerenciador: GerenciadorAtendimento) void
-            -imprimirOrdenacoes(registros: RegistroAtendimento[]) void
+            -gerenciadorAtendimento: GerenciadorAtendimento
+            -qtdAtendimentosTotalGlobal: int
+            -qtdAtendimentosGeralGlobal: int
+            -qtdAtendimentosPrioritarioGlobal: int
+            -tempoEsperaMedioGeralGlobal: double
+            -tempoEsperaMedioPrioritarioGlobal: double
+            -tempoEsperaMedioTotalGlobal: double
+            +calculaTempoEsperaGlobal() void
+            +calculaQtdAtendimentosGlobal() void
+            +imprimirRelatorio() void
         }
     }
     
