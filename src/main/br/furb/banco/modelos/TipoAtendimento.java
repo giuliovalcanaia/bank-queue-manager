@@ -1,5 +1,8 @@
 package br.furb.banco.modelos;
 
+/**
+ * Enumeração que representa os tipos possíveis de atendimento
+ */
 public enum TipoAtendimento {
 
     PREFERENCIAL("Atendimento Preferencial"),
